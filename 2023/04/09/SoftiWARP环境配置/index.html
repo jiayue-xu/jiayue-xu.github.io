@@ -19,25 +19,27 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"jiayue-xu.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.15.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="Blog on computer science technology by xjy.">
+    <meta name="description" content="实验环境 Ubuntu版本： 22.04 Linux版本： 5.15.0-58-generic CPU指令集架构：x86_64  环境配置安装用户态库和工具 123$ sudo apt-get install build-essential libelf-dev cmake$ sudo apt-get install libibverbs1 libibverbs-dev librdmacm1  l">
 <meta property="og:type" content="blog">
-<meta property="og:title">
-<meta property="og:url" content="https://jiayue-xu.github.io/index.html">
+<meta property="og:title" content="SoftiWARP环境配置">
+<meta property="og:url" content="https://jiayue-xu.github.io/2023/04/09/SoftiWARP%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/index.html">
 <meta property="og:site_name">
-<meta property="og:description" content="Blog on computer science technology by xjy.">
+<meta property="og:description" content="实验环境 Ubuntu版本： 22.04 Linux版本： 5.15.0-58-generic CPU指令集架构：x86_64  环境配置安装用户态库和工具 123$ sudo apt-get install build-essential libelf-dev cmake$ sudo apt-get install libibverbs1 libibverbs-dev librdmacm1  l">
 <meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-04-09T03:02:50.000Z">
+<meta property="article:modified_time" content="2023-04-10T12:43:07.152Z">
 <meta property="article:author" content="Jiayue Xu">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="https://jiayue-xu.github.io/">
+<link rel="canonical" href="https://jiayue-xu.github.io/2023/04/09/SoftiWARP%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":true,"isPost":false,"lang":"zh-CN","comments":"","permalink":"","path":"index.html","title":""}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://jiayue-xu.github.io/2023/04/09/SoftiWARP%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/","path":"2023/04/09/SoftiWARP环境配置/","title":"SoftiWARP环境配置"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title></title>
+<title>SoftiWARP环境配置 | </title>
   
 
 
@@ -70,7 +72,7 @@
 
     <a href="/" class="brand" rel="start">
       <i class="logo-line"></i>
-      <h1 class="site-title"></h1>
+      <p class="site-title"></p>
       <i class="logo-line"></i>
     </a>
   </div>
@@ -96,7 +98,7 @@
   
   <aside class="sidebar">
 
-    <div class="sidebar-inner sidebar-overview-active">
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
       <ul class="sidebar-nav">
         <li class="sidebar-nav-toc">
           文章目录
@@ -109,6 +111,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E9%AA%8C%E7%8E%AF%E5%A2%83"><span class="nav-number">1.</span> <span class="nav-text">实验环境</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE"><span class="nav-number">2.</span> <span class="nav-text">环境配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#rping%E6%B5%8B%E8%AF%95"><span class="nav-number">3.</span> <span class="nav-text">rping测试</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -141,319 +144,17 @@
 
     </div>
 
-    <div class="main-inner index posts-expand">
+    <div class="main-inner post posts-expand">
 
-    
+
+  
 
 
 <div class="post-block">
   
   
 
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://jiayue-xu.github.io/2023/04/10/QP/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Jiayue Xu">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="">
-      <meta itemprop="description" content="Blog on computer science technology by xjy.">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | ">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2023/04/10/QP/" class="post-title-link" itemprop="url">QP</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-      
-
-      <time title="创建时间：2023-04-10 16:07:34 / 修改时间：20:43:50" itemprop="dateCreated datePublished" datetime="2023-04-10T16:07:34+08:00">2023-04-10</time>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>在RDMA网络编程中，QP的作用类似于TCP中的socket，可见QP的重要程度。本文介绍QP的基本概念，以及IB Verbs中与QP相关的接口。</p>
-<h2 id="QP状态机"><a href="#QP状态机" class="headerlink" title="QP状态机"></a>QP状态机</h2><p>在一个QP的生命周期中,它所处的状态有以下几种情况:</p>
-<ul>
-<li><p>Reset - QP被创建后，处于Reset状态</p>
-<ul>
-<li>可以通过调用ibv_modify_qp将QP从任何状态转换至Reset状态</li>
-<li>不能进行post send/recv操作，否则会返回错误</li>
-<li>对方发过来的数据包也会被自动丢弃</li>
-</ul>
-</li>
-<li><p>Initialize (Init) - 调用ibv_modify_qp将QP从Reset转到Init状态</p>
-<ul>
-<li>可以进行post recv操作，不能进行post send操作否则会返回错误</li>
-<li>只能post receive，post send会返回错误</li>
-<li>SWQE/RWQE都不会被处理</li>
-</ul>
-</li>
-<li><p>Ready To Receive (RTR)</p>
-<ul>
-<li>调用ibv_modify_qp将QP从Init转至该状态</li>
-<li>QP只能作为响应的一方(responder)</li>
-<li>只能post receive，post send会返回错误</li>
-<li>只有RWQE会被处理</li>
-<li>进到这个QP的包会被处理，QP只会被动响应发送包(如: data, acks and nacks).</li>
-</ul>
-</li>
-<li><p>Ready To Send (RTS)</p>
-<ul>
-<li>调用ibv_modify_qp将QP从RTR或SQD转至该状态</li>
-<li>QP可以作为请求方(requester)或响应方(responder)</li>
-<li>可以post send/recv</li>
-<li>SWQE/RWQE都会被处理</li>
-<li>QP可以主动发送请求包</li>
-</ul>
-</li>
-<li><p>Send Queue Drained (SQD)</p>
-<ul>
-<li>调用ibv_modify_qp将QP从RTS转至该状态</li>
-<li>可以post send/recv</li>
-<li>正在被处理的SWQE会被继续处理，新post的SWQE不会被处理</li>
-</ul>
-</li>
-<li><p>Send Queue Error (SQE)</p>
-<ul>
-<li>除了RC类型的QP，其他所有QP在RTS状态下发送数据包遇到错误时，会自动转至到该状态。</li>
-<li>SQ中剩下的所有SWQE都会返回错误。</li>
-<li>可以调用ibv_modify_qp返回至RTS状态</li>
-<li>可以post send/recv，send会立即返回错误，recv会被正常处理</li>
-</ul>
-</li>
-<li><p>Error</p>
-<ul>
-<li>调用ibv_modify_qp将QP从任何状态转至该状态</li>
-<li>RC类型的QP在RTS状态下发送数据包遇到错误或任何类型QP接收出错，会自动转至该状态</li>
-<li>可以post send/recv，但是会立即返回错误</li>
-</ul>
-</li>
-</ul>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>下表总结了QP在每个状态下的行为。</p>
-<table>
-<thead>
-<tr>
-<th></th>
-<th>Reset</th>
-<th>Init</th>
-<th>RTR</th>
-<th>RTS</th>
-<th>SQD</th>
-<th>SQE</th>
-<th>Error</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>Post receive</td>
-<td>Disallowed</td>
-<td>Allowed</td>
-<td>Allowed</td>
-<td>Allowed</td>
-<td>Allowed</td>
-<td>Allowed</td>
-<td>Allowed</td>
-</tr>
-<tr>
-<td>Post send</td>
-<td>Disallowed</td>
-<td>Disallowed</td>
-<td>Disallowed</td>
-<td>Allowed</td>
-<td>Allowed</td>
-<td>Allowed</td>
-<td>Allowed</td>
-</tr>
-<tr>
-<td>RWQE</td>
-<td>Not processed</td>
-<td>Not processed</td>
-<td>Processed</td>
-<td>Processed</td>
-<td>Processed</td>
-<td>Processed</td>
-<td>Flushed with error</td>
-</tr>
-<tr>
-<td>SWQE</td>
-<td>Not processed</td>
-<td>Not processed</td>
-<td>Not processed</td>
-<td>Processed</td>
-<td>New WRs aren’t processed</td>
-<td>Flushed with error</td>
-<td>Flushed with error</td>
-</tr>
-<tr>
-<td>Incoming packets</td>
-<td>Silently dropped</td>
-<td>Silently dropped</td>
-<td>Handled</td>
-<td>Handled</td>
-<td>Handled</td>
-<td>Handled</td>
-<td>Silently dropped</td>
-</tr>
-<tr>
-<td>Outgoing packets</td>
-<td>None</td>
-<td>None</td>
-<td>None</td>
-<td>Initiated</td>
-<td>Initiated</td>
-<td>None</td>
-<td>None</td>
-</tr>
-</tbody></table>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://jiayue-xu.github.io/2023/04/10/%E5%88%9D%E8%AF%86OFED/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Jiayue Xu">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="">
-      <meta itemprop="description" content="Blog on computer science technology by xjy.">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | ">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2023/04/10/%E5%88%9D%E8%AF%86OFED/" class="post-title-link" itemprop="url">初识OFED</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-      
-
-      <time title="创建时间：2023-04-10 14:46:08 / 修改时间：15:42:02" itemprop="dateCreated datePublished" datetime="2023-04-10T14:46:08+08:00">2023-04-10</time>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>OpenFabrics Enterprise Distribution(OFED)是一个软件包，它打包了所有Linux支持RDMA协议所需的组件，包括用户态库和内核驱动等，具体介绍如下：</p>
-<h2 id="应用程序库"><a href="#应用程序库" class="headerlink" title="应用程序库"></a>应用程序库</h2><ul>
-<li>诊断工具 - 调试、诊断IB网络</li>
-<li>子网管理(OpenSM) - 管理、配置IB网络</li>
-<li>消息传递接口(MPI)库 - 用于支持并行应用程序的API接口</li>
-</ul>
-<h2 id="用户级APIs"><a href="#用户级APIs" class="headerlink" title="用户级APIs"></a>用户级APIs</h2><ul>
-<li>RDMA verbs - InfiniBand和iWARP协议定义的RDMA API</li>
-<li>RDMA-CM - 用于支持RDMA CM连接管理通信</li>
-</ul>
-<h2 id="上层协议-ULPs"><a href="#上层协议-ULPs" class="headerlink" title="上层协议(ULPs)"></a>上层协议(ULPs)</h2><p>用于支持RDMA上层协议的内核模块</p>
-<ul>
-<li>IPoIB - 支持IP over InfiniBand协议</li>
-<li>SRP - 支持SCSI RDMA Protocol</li>
-<li>iSER - 支持iSCSI Extensions for RDMA</li>
-</ul>
-<h2 id="中间层"><a href="#中间层" class="headerlink" title="中间层"></a>中间层</h2><p>用于支持用户级程序和内核级模块的内核模块。</p>
-<ul>
-<li>IB core - 在kernel中实现RDMA的核心模块</li>
-<li>CMA - 连接管理模块</li>
-<li>MAD - 用于管理IB网络中的MAD报文</li>
-<li>SA client - 处理子网代理(SA)之间的通信</li>
-</ul>
-<h2 id="供应商驱动"><a href="#供应商驱动" class="headerlink" title="供应商驱动"></a>供应商驱动</h2><p>不同厂商的RDMA设备(HCAs and RNICs)低层级驱动</p>
-<ul>
-<li>Mellanox Technologies</li>
-<li>Intel</li>
-<li>华为</li>
-<li>…</li>
-</ul>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>OFED由很多公司和组织共同维护，大概以六个月为一个周期进行开发、测试和发布。</p>
-<h2 id="相关链接"><a href="#相关链接" class="headerlink" title="相关链接"></a>相关链接</h2><p><a target="_blank" rel="noopener" href="https://www.openfabrics.org/">openfabrics</a><br><a target="_blank" rel="noopener" href="https://github.com/linux-rdma/rdma-core">rdma-core</a></p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://jiayue-xu.github.io/2023/04/09/SoftiWARP%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -467,13 +168,13 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | ">
+      <meta itemprop="name" content="SoftiWARP环境配置 | ">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2023/04/09/SoftiWARP%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/" class="post-title-link" itemprop="url">SoftiWARP环境配置</a>
-        </h2>
+        <h1 class="post-title" itemprop="name headline">
+          SoftiWARP环境配置
+        </h1>
 
         <div class="post-meta-container">
           <div class="post-meta">
@@ -503,7 +204,7 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h3 id="实验环境"><a href="#实验环境" class="headerlink" title="实验环境"></a>实验环境</h3><ol>
+        <h3 id="实验环境"><a href="#实验环境" class="headerlink" title="实验环境"></a>实验环境</h3><ol>
 <li>Ubuntu版本： 22.04</li>
 <li>Linux版本： 5.15.0-58-generic</li>
 <li>CPU指令集架构：x86_64</li>
@@ -548,7 +249,6 @@
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 开启server，server地址为172.18.96.147</span></span><br><span class="line">$ rping -s -a 172.18.96.147</span><br><span class="line"></span><br><span class="line"><span class="comment"># 开启client，请求连接的server地址为172.18.96.147</span></span><br><span class="line">$ rping -c -a 172.18.96.147 -v</span><br></pre></td></tr></table></figure>
 
 
-      
     </div>
 
     
@@ -556,11 +256,39 @@
     
 
     <footer class="post-footer">
-        <div class="post-eof"></div>
-      
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Jiayue Xu
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://jiayue-xu.github.io/2023/04/09/SoftiWARP%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/" title="SoftiWARP环境配置">https://jiayue-xu.github.io/2023/04/09/SoftiWARP环境配置/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+            </div>
+            <div class="post-nav-item">
+                <a href="/2023/04/10/%E5%88%9D%E8%AF%86OFED/" rel="next" title="初识OFED">
+                  初识OFED <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
     </footer>
   </article>
 </div>
+
 
 
 

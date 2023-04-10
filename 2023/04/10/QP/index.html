@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 5.4.2">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha256-HtsXJanqjKTc8vVQjO4YMhiqFoXkfBsjBWcX91T1jr8=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"jiayue-xu.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.15.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="在RDMA网络编程中，QP的作用类似于TCP中的socket，可见QP的重要程度。本文介绍QP的基本概念，以及IB Verbs中与QP相关的接口。 QP状态机在一个QP的生命周期中,它所处的状态有以下几种情况:  Reset - QP被创建后，处于Reset状态  可以通过调用ibv_modify_qp将QP从任何状态转换至Reset状态 不能进行post send&#x2F;recv操作，否则会返回错误">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="QP">
+<meta property="og:url" content="https://jiayue-xu.github.io/2023/04/10/QP/index.html">
+<meta property="og:site_name">
+<meta property="og:description" content="在RDMA网络编程中，QP的作用类似于TCP中的socket，可见QP的重要程度。本文介绍QP的基本概念，以及IB Verbs中与QP相关的接口。 QP状态机在一个QP的生命周期中,它所处的状态有以下几种情况:  Reset - QP被创建后，处于Reset状态  可以通过调用ibv_modify_qp将QP从任何状态转换至Reset状态 不能进行post send&#x2F;recv操作，否则会返回错误">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-04-10T08:07:34.000Z">
+<meta property="article:modified_time" content="2023-04-10T12:43:50.454Z">
+<meta property="article:author" content="Jiayue Xu">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://jiayue-xu.github.io/2023/04/10/QP/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://jiayue-xu.github.io/2023/04/10/QP/","path":"2023/04/10/QP/","title":"QP"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>QP | </title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title"></p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">3</span></a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#QP%E7%8A%B6%E6%80%81%E6%9C%BA"><span class="nav-number">1.</span> <span class="nav-text">QP状态机</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">2.</span> <span class="nav-text">总结</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Jiayue Xu</p>
+  <div class="site-description" itemprop="description">Blog on computer science technology by xjy.</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">3</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+  </nav>
+</div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://jiayue-xu.github.io/2023/04/10/QP/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Jiayue Xu">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="Blog on computer science technology by xjy.">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="QP | ">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          QP
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2023-04-10 16:07:34 / 修改时间：20:43:50" itemprop="dateCreated datePublished" datetime="2023-04-10T16:07:34+08:00">2023-04-10</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>在RDMA网络编程中，QP的作用类似于TCP中的socket，可见QP的重要程度。本文介绍QP的基本概念，以及IB Verbs中与QP相关的接口。</p>
+<h2 id="QP状态机"><a href="#QP状态机" class="headerlink" title="QP状态机"></a>QP状态机</h2><p>在一个QP的生命周期中,它所处的状态有以下几种情况:</p>
+<ul>
+<li><p>Reset - QP被创建后，处于Reset状态</p>
+<ul>
+<li>可以通过调用ibv_modify_qp将QP从任何状态转换至Reset状态</li>
+<li>不能进行post send/recv操作，否则会返回错误</li>
+<li>对方发过来的数据包也会被自动丢弃</li>
+</ul>
+</li>
+<li><p>Initialize (Init) - 调用ibv_modify_qp将QP从Reset转到Init状态</p>
+<ul>
+<li>可以进行post recv操作，不能进行post send操作否则会返回错误</li>
+<li>只能post receive，post send会返回错误</li>
+<li>SWQE/RWQE都不会被处理</li>
+</ul>
+</li>
+<li><p>Ready To Receive (RTR)</p>
+<ul>
+<li>调用ibv_modify_qp将QP从Init转至该状态</li>
+<li>QP只能作为响应的一方(responder)</li>
+<li>只能post receive，post send会返回错误</li>
+<li>只有RWQE会被处理</li>
+<li>进到这个QP的包会被处理，QP只会被动响应发送包(如: data, acks and nacks).</li>
+</ul>
+</li>
+<li><p>Ready To Send (RTS)</p>
+<ul>
+<li>调用ibv_modify_qp将QP从RTR或SQD转至该状态</li>
+<li>QP可以作为请求方(requester)或响应方(responder)</li>
+<li>可以post send/recv</li>
+<li>SWQE/RWQE都会被处理</li>
+<li>QP可以主动发送请求包</li>
+</ul>
+</li>
+<li><p>Send Queue Drained (SQD)</p>
+<ul>
+<li>调用ibv_modify_qp将QP从RTS转至该状态</li>
+<li>可以post send/recv</li>
+<li>正在被处理的SWQE会被继续处理，新post的SWQE不会被处理</li>
+</ul>
+</li>
+<li><p>Send Queue Error (SQE)</p>
+<ul>
+<li>除了RC类型的QP，其他所有QP在RTS状态下发送数据包遇到错误时，会自动转至到该状态。</li>
+<li>SQ中剩下的所有SWQE都会返回错误。</li>
+<li>可以调用ibv_modify_qp返回至RTS状态</li>
+<li>可以post send/recv，send会立即返回错误，recv会被正常处理</li>
+</ul>
+</li>
+<li><p>Error</p>
+<ul>
+<li>调用ibv_modify_qp将QP从任何状态转至该状态</li>
+<li>RC类型的QP在RTS状态下发送数据包遇到错误或任何类型QP接收出错，会自动转至该状态</li>
+<li>可以post send/recv，但是会立即返回错误</li>
+</ul>
+</li>
+</ul>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>下表总结了QP在每个状态下的行为。</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Reset</th>
+<th>Init</th>
+<th>RTR</th>
+<th>RTS</th>
+<th>SQD</th>
+<th>SQE</th>
+<th>Error</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Post receive</td>
+<td>Disallowed</td>
+<td>Allowed</td>
+<td>Allowed</td>
+<td>Allowed</td>
+<td>Allowed</td>
+<td>Allowed</td>
+<td>Allowed</td>
+</tr>
+<tr>
+<td>Post send</td>
+<td>Disallowed</td>
+<td>Disallowed</td>
+<td>Disallowed</td>
+<td>Allowed</td>
+<td>Allowed</td>
+<td>Allowed</td>
+<td>Allowed</td>
+</tr>
+<tr>
+<td>RWQE</td>
+<td>Not processed</td>
+<td>Not processed</td>
+<td>Processed</td>
+<td>Processed</td>
+<td>Processed</td>
+<td>Processed</td>
+<td>Flushed with error</td>
+</tr>
+<tr>
+<td>SWQE</td>
+<td>Not processed</td>
+<td>Not processed</td>
+<td>Not processed</td>
+<td>Processed</td>
+<td>New WRs aren’t processed</td>
+<td>Flushed with error</td>
+<td>Flushed with error</td>
+</tr>
+<tr>
+<td>Incoming packets</td>
+<td>Silently dropped</td>
+<td>Silently dropped</td>
+<td>Handled</td>
+<td>Handled</td>
+<td>Handled</td>
+<td>Handled</td>
+<td>Silently dropped</td>
+</tr>
+<tr>
+<td>Outgoing packets</td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>Initiated</td>
+<td>Initiated</td>
+<td>None</td>
+<td>None</td>
+</tr>
+</tbody></table>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Jiayue Xu
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://jiayue-xu.github.io/2023/04/10/QP/" title="QP">https://jiayue-xu.github.io/2023/04/10/QP/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/04/10/%E5%88%9D%E8%AF%86OFED/" rel="prev" title="初识OFED">
+                  <i class="fa fa-chevron-left"></i> 初识OFED
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Jiayue Xu</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>
