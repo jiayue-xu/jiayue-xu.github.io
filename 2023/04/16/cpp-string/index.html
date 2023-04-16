@@ -19,27 +19,28 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"jiayue-xu.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.15.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="OpenFabrics Enterprise Distribution(OFED)是一个软件包，它打包了所有Linux支持RDMA协议所需的组件，包括用户态库和内核驱动等，具体介绍如下：">
+    <meta name="description" content="IO操作 cin &gt;&gt; s - 从标准输入读入字符串至s中，在遇到第一个有效字符前，会自动忽略空格和回车，遇到第一个有效字符后开始读入字符串，直到遇见第一个空格或回车停止读取，并将空格和回车留在缓冲区内。  getline - 从第一个字符开始读取，直到遇见回车停止读取，并把回车丢弃。 123456789101112int main()&amp;#123;	string s1, s2;	cin">
 <meta property="og:type" content="blog">
-<meta property="og:title" content="初识OFED">
-<meta property="og:url" content="https://jiayue-xu.github.io/2023/04/10/%E5%88%9D%E8%AF%86OFED/index.html">
+<meta property="og:title" content="string">
+<meta property="og:url" content="https://jiayue-xu.github.io/2023/04/16/cpp-string/index.html">
 <meta property="og:site_name">
-<meta property="og:description" content="OpenFabrics Enterprise Distribution(OFED)是一个软件包，它打包了所有Linux支持RDMA协议所需的组件，包括用户态库和内核驱动等，具体介绍如下：">
+<meta property="og:description" content="IO操作 cin &gt;&gt; s - 从标准输入读入字符串至s中，在遇到第一个有效字符前，会自动忽略空格和回车，遇到第一个有效字符后开始读入字符串，直到遇见第一个空格或回车停止读取，并将空格和回车留在缓冲区内。  getline - 从第一个字符开始读取，直到遇见回车停止读取，并把回车丢弃。 123456789101112int main()&amp;#123;	string s1, s2;	cin">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2023-04-10T06:46:08.000Z">
-<meta property="article:modified_time" content="2023-04-13T07:14:07.266Z">
+<meta property="article:published_time" content="2023-04-16T06:35:08.000Z">
+<meta property="article:modified_time" content="2023-04-16T08:07:05.902Z">
 <meta property="article:author" content="Jiayue Xu">
+<meta property="article:tag" content="cpp">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="https://jiayue-xu.github.io/2023/04/10/%E5%88%9D%E8%AF%86OFED/">
+<link rel="canonical" href="https://jiayue-xu.github.io/2023/04/16/cpp-string/">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://jiayue-xu.github.io/2023/04/10/%E5%88%9D%E8%AF%86OFED/","path":"2023/04/10/初识OFED/","title":"初识OFED"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://jiayue-xu.github.io/2023/04/16/cpp-string/","path":"2023/04/16/cpp-string/","title":"string"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>初识OFED | </title>
+<title>string | </title>
   
 
 
@@ -111,7 +112,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F%E5%BA%93"><span class="nav-number">1.</span> <span class="nav-text">应用程序库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%A8%E6%88%B7%E7%BA%A7APIs"><span class="nav-number">2.</span> <span class="nav-text">用户级APIs</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8A%E5%B1%82%E5%8D%8F%E8%AE%AE-ULPs"><span class="nav-number">3.</span> <span class="nav-text">上层协议(ULPs)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%AD%E9%97%B4%E5%B1%82"><span class="nav-number">4.</span> <span class="nav-text">中间层</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BE%9B%E5%BA%94%E5%95%86%E9%A9%B1%E5%8A%A8"><span class="nav-number">5.</span> <span class="nav-text">供应商驱动</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">6.</span> <span class="nav-text">总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%B8%E5%85%B3%E9%93%BE%E6%8E%A5"><span class="nav-number">7.</span> <span class="nav-text">相关链接</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#IO%E6%93%8D%E4%BD%9C"><span class="nav-number">1.</span> <span class="nav-text">IO操作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#cctype"><span class="nav-number">2.</span> <span class="nav-text">cctype</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -165,7 +166,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://jiayue-xu.github.io/2023/04/10/%E5%88%9D%E8%AF%86OFED/">
+    <link itemprop="mainEntityOfPage" href="https://jiayue-xu.github.io/2023/04/16/cpp-string/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -178,12 +179,12 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="初识OFED | ">
+      <meta itemprop="name" content="string | ">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          初识OFED
+          string
         </h1>
 
         <div class="post-meta-container">
@@ -193,15 +194,18 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
+      
 
-      <time title="创建时间：2023-04-10 14:46:08" itemprop="dateCreated datePublished" datetime="2023-04-10T14:46:08+08:00">2023-04-10</time>
+      <time title="创建时间：2023-04-16 14:35:08 / 修改时间：16:07:05" itemprop="dateCreated datePublished" datetime="2023-04-16T14:35:08+08:00">2023-04-16</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
+        <i class="far fa-folder"></i>
       </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-04-13 15:14:07" itemprop="dateModified" datetime="2023-04-13T15:14:07+08:00">2023-04-13</time>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/cpp/" itemprop="url" rel="index"><span itemprop="name">cpp</span></a>
+        </span>
     </span>
 
   
@@ -214,40 +218,36 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <p>OpenFabrics Enterprise Distribution(OFED)是一个软件包，它打包了所有Linux支持RDMA协议所需的组件，包括用户态库和内核驱动等，具体介绍如下：</p>
-<span id="more"></span>
-
-<h2 id="应用程序库"><a href="#应用程序库" class="headerlink" title="应用程序库"></a>应用程序库</h2><ul>
-<li>诊断工具 - 调试、诊断IB网络</li>
-<li>子网管理(OpenSM) - 管理、配置IB网络</li>
-<li>消息传递接口(MPI)库 - 用于支持并行应用程序的API接口</li>
-</ul>
-<h2 id="用户级APIs"><a href="#用户级APIs" class="headerlink" title="用户级APIs"></a>用户级APIs</h2><ul>
-<li>RDMA verbs - InfiniBand和iWARP协议定义的RDMA API</li>
-<li>RDMA-CM - 用于支持RDMA CM连接管理通信</li>
-</ul>
-<h2 id="上层协议-ULPs"><a href="#上层协议-ULPs" class="headerlink" title="上层协议(ULPs)"></a>上层协议(ULPs)</h2><p>用于支持RDMA上层协议的内核模块</p>
+        <h2 id="IO操作"><a href="#IO操作" class="headerlink" title="IO操作"></a>IO操作</h2><ul>
+<li><p><code>cin &gt;&gt; s</code> - 从标准输入读入字符串至s中，在遇到第一个有效字符前，会自动忽略空格和回车，遇到第一个有效字符后开始读入字符串，直到遇见第一个空格或回车停止读取，并将空格和回车留在缓冲区内。</p>
+</li>
+<li><p>getline - 从第一个字符开始读取，直到遇见回车停止读取，并把回车丢弃。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	string s1, s2;</span><br><span class="line"></span><br><span class="line">	cin &gt;&gt; s1;</span><br><span class="line">	cout &lt;&lt; <span class="string">&quot;s1: &quot;</span> &lt;&lt; s1 &lt;&lt; endl;</span><br><span class="line"></span><br><span class="line">	<span class="built_in">getline</span>(cin, s2);</span><br><span class="line">	cout &lt;&lt; <span class="string">&quot;s2: &quot;</span> &lt;&lt; s2 &lt;&lt;endl;</span><br><span class="line">	cout &lt;&lt; <span class="string">&quot;size: &quot;</span> &lt;&lt; s2.<span class="built_in">size</span>() &lt;&lt; endl;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ ./main</span><br><span class="line"></span><br><span class="line">  string1 string2 </span><br><span class="line">s1: string1</span><br><span class="line">s2:  string2 </span><br><span class="line">size: 9</span><br></pre></td></tr></table></figure></li>
+<li><p>s.empty() - 返回<code>true</code>如果字符串为空</p>
+</li>
+<li><p>s.size() - 返回字符个数</p>
 <ul>
-<li>IPoIB - 支持IP over InfiniBand协议</li>
-<li>SRP - 支持SCSI RDMA Protocol</li>
-<li>iSER - 支持iSCSI Extensions for RDMA</li>
+<li>不要用这个函数来判断字符串是否为空，会影响代码可读性</li>
+<li>用<code>string::size_type</code>类型的变量来接收<code>size()</code>的返回值，这是一个独立于平台的类型，实际上是一个unsigned类型</li>
+<li>不要把返回值和signed类型的变量进行比较，容易引起意想不到的结果</li>
 </ul>
-<h2 id="中间层"><a href="#中间层" class="headerlink" title="中间层"></a>中间层</h2><p>用于支持用户级程序和内核级模块的内核模块。</p>
+</li>
+</ul>
+<h2 id="cctype"><a href="#cctype" class="headerlink" title="cctype"></a>cctype</h2><p>在C标准库<code>&lt;ctype.h&gt;</code>中定义了很多函数简化字符串的操作，在C++中可以通过包含<code>&lt;cctype&gt;</code>头文件使用这些函数。使用<code>&lt;cctype&gt;</code>和<code>&lt;ctype.h&gt;</code>的区别在于，<cctype>把这些函数添加到了<code>std::</code>命名空间中，有利于写法的统一，避免命名冲突。</p>
+<p><code>&lt;cctype&gt;</code>中常用的函数有：</p>
 <ul>
-<li>IB core - 在kernel中实现RDMA的核心模块</li>
-<li>CMA - 连接管理模块</li>
-<li>MAD - 用于管理IB网络中的MAD报文</li>
-<li>SA client - 处理子网代理(SA)之间的通信</li>
+<li><code>isalnum(c)</code> - 如果c为字母或数字，返回true</li>
+<li><code>isalpha(c)</code> - 如果c是字母，返回true</li>
+<li><code>isdigit(c)</code> - 如果c是数字，返回true</li>
+<li><code>islower(c)</code> - 如果c是小写字母，返回true</li>
+<li><code>ispunct(c)</code> - 如果c是标点，返回true</li>
+<li><code>isspace(c)</code> - 如果c是空格、回车、tab，返回true</li>
+<li><code>isupper(c)</code> - 如果c是大写字母，返回true</li>
+<li><code>isxdigit(c)</code> - 如果c是十六进制数字，返回true</li>
+<li><code>tolower(c)</code> - 如果c是大写字母，把它转换为小写字母</li>
+<li><code>toupper(c)</code> - 如果c是小写字母，把它转换为大写字母</li>
 </ul>
-<h2 id="供应商驱动"><a href="#供应商驱动" class="headerlink" title="供应商驱动"></a>供应商驱动</h2><p>不同厂商的RDMA设备(HCAs and RNICs)低层级驱动</p>
-<ul>
-<li>Mellanox Technologies</li>
-<li>Intel</li>
-<li>华为</li>
-<li>…</li>
-</ul>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>OFED由很多公司和组织共同维护，大概以六个月为一个周期进行开发、测试和发布。</p>
-<h2 id="相关链接"><a href="#相关链接" class="headerlink" title="相关链接"></a>相关链接</h2><p><a target="_blank" rel="noopener" href="https://www.openfabrics.org/">openfabrics</a><br><a target="_blank" rel="noopener" href="https://github.com/linux-rdma/rdma-core">rdma-core</a></p>
 
     </div>
 
@@ -265,7 +265,7 @@
   </li>
   <li class="post-copyright-link">
       <strong>本文链接：</strong>
-      <a href="https://jiayue-xu.github.io/2023/04/10/%E5%88%9D%E8%AF%86OFED/" title="初识OFED">https://jiayue-xu.github.io/2023/04/10/初识OFED/</a>
+      <a href="https://jiayue-xu.github.io/2023/04/16/cpp-string/" title="string">https://jiayue-xu.github.io/2023/04/16/cpp-string/</a>
   </li>
   <li class="post-copyright-license">
       <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -273,19 +273,19 @@
 </ul>
 </div>
 
+          <div class="post-tags">
+              <a href="/tags/cpp/" rel="tag"># cpp</a>
+          </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/2023/04/09/SoftiWARP%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/" rel="prev" title="SoftiWARP环境配置">
-                  <i class="fa fa-chevron-left"></i> SoftiWARP环境配置
+                <a href="/2023/04/13/rdma-reliable-service/" rel="prev" title="IB传输层的可靠服务">
+                  <i class="fa fa-chevron-left"></i> IB传输层的可靠服务
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2023/04/10/QP/" rel="next" title="QP">
-                  QP <i class="fa fa-chevron-right"></i>
-                </a>
             </div>
           </div>
     </footer>

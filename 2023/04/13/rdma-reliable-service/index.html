@@ -21,23 +21,27 @@
 
     <meta name="description" content="Blog on computer science technology by xjy.">
 <meta property="og:type" content="blog">
-<meta property="og:title">
-<meta property="og:url" content="https://jiayue-xu.github.io/archives/index.html">
+<meta property="og:title" content="IB传输层的可靠服务">
+<meta property="og:url" content="https://jiayue-xu.github.io/2023/04/13/rdma-reliable-service/index.html">
 <meta property="og:site_name">
 <meta property="og:description" content="Blog on computer science technology by xjy.">
 <meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-04-13T07:02:08.514Z">
+<meta property="article:modified_time" content="2023-04-13T11:07:09.985Z">
 <meta property="article:author" content="Jiayue Xu">
+<meta property="article:tag" content="RDMA">
+<meta property="article:tag" content="Infiniband">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="https://jiayue-xu.github.io/archives/">
+<link rel="canonical" href="https://jiayue-xu.github.io/2023/04/13/rdma-reliable-service/">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":false,"lang":"zh-CN","comments":"","permalink":"","path":"archives/index.html","title":""}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://jiayue-xu.github.io/2023/04/13/rdma-reliable-service/","path":"2023/04/13/rdma-reliable-service/","title":"IB传输层的可靠服务"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>归档 | </title>
+<title>IB传输层的可靠服务 | </title>
   
 
 
@@ -70,7 +74,7 @@
 
     <a href="/" class="brand" rel="start">
       <i class="logo-line"></i>
-      <h1 class="site-title"></h1>
+      <p class="site-title"></p>
       <i class="logo-line"></i>
     </a>
   </div>
@@ -151,149 +155,129 @@
 
     </div>
 
-    <div class="main-inner archive posts-collapse">
+    <div class="main-inner post posts-expand">
 
 
   
-  
-  
-  <div class="post-block">
-    <div class="post-content">
-      <div class="collection-title">
-        <span class="collection-header">嗯..! 目前共计 6 篇日志。 继续努力。</span>
-      </div>
 
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://jiayue-xu.github.io/2023/04/13/rdma-reliable-service/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Jiayue Xu">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="Blog on computer science technology by xjy.">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="IB传输层的可靠服务 | ">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          IB传输层的可靠服务
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
       
-    <div class="collection-year">
-      <span class="collection-header">2023</span>
+
+      <time title="创建时间：2023-04-13 15:02:08 / 修改时间：19:07:09" itemprop="dateCreated datePublished" datetime="2023-04-13T15:02:08+08:00">2023-04-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" itemprop="url" rel="index"><span itemprop="name">计算机网络</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/RDMA/" itemprop="url" rel="index"><span itemprop="name">RDMA</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/RDMA/Infiniband/" itemprop="url" rel="index"><span itemprop="name">Infiniband</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        
     </div>
 
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-      <div class="post-meta-container">
-        <time itemprop="dateCreated"
-              datetime="2023-04-16T14:35:08+08:00"
-              content="2023-04-16">
-          04-16
-        </time>
-      </div>
+    
+    
+    
 
-      <div class="post-title">
-          <a class="post-title-link" href="/2023/04/16/cpp-string/" itemprop="url">
-            <span itemprop="name">string</span>
-          </a>
-      </div>
+    <footer class="post-footer">
+          
 
-      
-    </header>
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Jiayue Xu
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://jiayue-xu.github.io/2023/04/13/rdma-reliable-service/" title="IB传输层的可靠服务">https://jiayue-xu.github.io/2023/04/13/rdma-reliable-service/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/RDMA/" rel="tag"># RDMA</a>
+              <a href="/tags/Infiniband/" rel="tag"># Infiniband</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/04/10/database-sql-basic/" rel="prev" title="SQL基础">
+                  <i class="fa fa-chevron-left"></i> SQL基础
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2023/04/16/cpp-string/" rel="next" title="string">
+                  string <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
   </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-      <div class="post-meta-container">
-        <time itemprop="dateCreated"
-              datetime="2023-04-13T15:02:08+08:00"
-              content="2023-04-13">
-          04-13
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2023/04/13/rdma-reliable-service/" itemprop="url">
-            <span itemprop="name">IB传输层的可靠服务</span>
-          </a>
-      </div>
-
-      
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-      <div class="post-meta-container">
-        <time itemprop="dateCreated"
-              datetime="2023-04-10T21:06:54+08:00"
-              content="2023-04-10">
-          04-10
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2023/04/10/database-sql-basic/" itemprop="url">
-            <span itemprop="name">SQL基础</span>
-          </a>
-      </div>
-
-      
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-      <div class="post-meta-container">
-        <time itemprop="dateCreated"
-              datetime="2023-04-10T16:07:34+08:00"
-              content="2023-04-10">
-          04-10
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2023/04/10/QP/" itemprop="url">
-            <span itemprop="name">QP</span>
-          </a>
-      </div>
-
-      
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-      <div class="post-meta-container">
-        <time itemprop="dateCreated"
-              datetime="2023-04-10T14:46:08+08:00"
-              content="2023-04-10">
-          04-10
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2023/04/10/%E5%88%9D%E8%AF%86OFED/" itemprop="url">
-            <span itemprop="name">初识OFED</span>
-          </a>
-      </div>
-
-      
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-      <div class="post-meta-container">
-        <time itemprop="dateCreated"
-              datetime="2023-04-09T11:02:50+08:00"
-              content="2023-04-09">
-          04-09
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2023/04/09/SoftiWARP%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/" itemprop="url">
-            <span itemprop="name">SoftiWARP环境配置</span>
-          </a>
-      </div>
-
-      
-    </header>
-  </article>
+</div>
 
 
-    </div>
-  </div>
-  
-  
-  
+
+
+
 
 </div>
   </main>

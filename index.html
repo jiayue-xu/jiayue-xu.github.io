@@ -84,7 +84,7 @@
 
 
 <nav class="site-nav">
-  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">3</span></a></li>
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">3</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">6</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">6</span></a></li>
   </ul>
 </nav>
 
@@ -121,9 +121,19 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">3</span>
+          <span class="site-state-item-count">6</span>
           <span class="site-state-item-name">日志</span>
         </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
 </div>
@@ -142,6 +152,296 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://jiayue-xu.github.io/2023/04/16/cpp-string/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Jiayue Xu">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="Blog on computer science technology by xjy.">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | ">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2023/04/16/cpp-string/" class="post-title-link" itemprop="url">string</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2023-04-16 14:35:08 / 修改时间：16:07:05" itemprop="dateCreated datePublished" datetime="2023-04-16T14:35:08+08:00">2023-04-16</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/cpp/" itemprop="url" rel="index"><span itemprop="name">cpp</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="IO操作"><a href="#IO操作" class="headerlink" title="IO操作"></a>IO操作</h2><ul>
+<li><p><code>cin &gt;&gt; s</code> - 从标准输入读入字符串至s中，在遇到第一个有效字符前，会自动忽略空格和回车，遇到第一个有效字符后开始读入字符串，直到遇见第一个空格或回车停止读取，并将空格和回车留在缓冲区内。</p>
+</li>
+<li><p>getline - 从第一个字符开始读取，直到遇见回车停止读取，并把回车丢弃。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	string s1, s2;</span><br><span class="line"></span><br><span class="line">	cin &gt;&gt; s1;</span><br><span class="line">	cout &lt;&lt; <span class="string">&quot;s1: &quot;</span> &lt;&lt; s1 &lt;&lt; endl;</span><br><span class="line"></span><br><span class="line">	<span class="built_in">getline</span>(cin, s2);</span><br><span class="line">	cout &lt;&lt; <span class="string">&quot;s2: &quot;</span> &lt;&lt; s2 &lt;&lt;endl;</span><br><span class="line">	cout &lt;&lt; <span class="string">&quot;size: &quot;</span> &lt;&lt; s2.<span class="built_in">size</span>() &lt;&lt; endl;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ ./main</span><br><span class="line"></span><br><span class="line">  string1 string2 </span><br><span class="line">s1: string1</span><br><span class="line">s2:  string2 </span><br><span class="line">size: 9</span><br></pre></td></tr></table></figure></li>
+<li><p>s.empty() - 返回<code>true</code>如果字符串为空</p>
+</li>
+<li><p>s.size() - 返回字符个数</p>
+<ul>
+<li>不要用这个函数来判断字符串是否为空，会影响代码可读性</li>
+<li>用<code>string::size_type</code>类型的变量来接收<code>size()</code>的返回值，这是一个独立于平台的类型，实际上是一个unsigned类型</li>
+<li>不要把返回值和signed类型的变量进行比较，容易引起意想不到的结果</li>
+</ul>
+</li>
+</ul>
+<h2 id="cctype"><a href="#cctype" class="headerlink" title="cctype"></a>cctype</h2><p>在C标准库<code>&lt;ctype.h&gt;</code>中定义了很多函数简化字符串的操作，在C++中可以通过包含<code>&lt;cctype&gt;</code>头文件使用这些函数。使用<code>&lt;cctype&gt;</code>和<code>&lt;ctype.h&gt;</code>的区别在于，<cctype>把这些函数添加到了<code>std::</code>命名空间中，有利于写法的统一，避免命名冲突。</p>
+<p><code>&lt;cctype&gt;</code>中常用的函数有：</p>
+<ul>
+<li><code>isalnum(c)</code> - 如果c为字母或数字，返回true</li>
+<li><code>isalpha(c)</code> - 如果c是字母，返回true</li>
+<li><code>isdigit(c)</code> - 如果c是数字，返回true</li>
+<li><code>islower(c)</code> - 如果c是小写字母，返回true</li>
+<li><code>ispunct(c)</code> - 如果c是标点，返回true</li>
+<li><code>isspace(c)</code> - 如果c是空格、回车、tab，返回true</li>
+<li><code>isupper(c)</code> - 如果c是大写字母，返回true</li>
+<li><code>isxdigit(c)</code> - 如果c是十六进制数字，返回true</li>
+<li><code>tolower(c)</code> - 如果c是大写字母，把它转换为小写字母</li>
+<li><code>toupper(c)</code> - 如果c是小写字母，把它转换为大写字母</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://jiayue-xu.github.io/2023/04/13/rdma-reliable-service/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Jiayue Xu">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="Blog on computer science technology by xjy.">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | ">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2023/04/13/rdma-reliable-service/" class="post-title-link" itemprop="url">IB传输层的可靠服务</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2023-04-13 15:02:08 / 修改时间：19:07:09" itemprop="dateCreated datePublished" datetime="2023-04-13T15:02:08+08:00">2023-04-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" itemprop="url" rel="index"><span itemprop="name">计算机网络</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/RDMA/" itemprop="url" rel="index"><span itemprop="name">RDMA</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/RDMA/Infiniband/" itemprop="url" rel="index"><span itemprop="name">Infiniband</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://jiayue-xu.github.io/2023/04/10/database-sql-basic/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Jiayue Xu">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="Blog on computer science technology by xjy.">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | ">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2023/04/10/database-sql-basic/" class="post-title-link" itemprop="url">SQL基础</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-04-10 21:06:54" itemprop="dateCreated datePublished" datetime="2023-04-10T21:06:54+08:00">2023-04-10</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-04-15 19:29:31" itemprop="dateModified" datetime="2023-04-15T19:29:31+08:00">2023-04-15</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/" itemprop="url" rel="index"><span itemprop="name">数据库</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/CMU15-445/" itemprop="url" rel="index"><span itemprop="name">CMU15-445</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>这一系列的文章主要用于记录我学习CMU 15-445的过程。A1：SQL，这个作业的任务是针对给定的<a target="_blank" rel="noopener" href="https://www.imdb.com/interfaces/">IMDB</a>数据集做SQL查询操作，掌握SQL的基本和高级特性，熟练使用<a target="_blank" rel="noopener" href="https://www.sqlite.org/index.html">SQLite</a>数据库管理系统。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2023/04/10/database-sql-basic/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -179,9 +479,15 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
-      
 
-      <time title="创建时间：2023-04-10 16:07:34 / 修改时间：20:43:50" itemprop="dateCreated datePublished" datetime="2023-04-10T16:07:34+08:00">2023-04-10</time>
+      <time title="创建时间：2023-04-10 16:07:34" itemprop="dateCreated datePublished" datetime="2023-04-10T16:07:34+08:00">2023-04-10</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-04-13 15:13:59" itemprop="dateModified" datetime="2023-04-13T15:13:59+08:00">2023-04-13</time>
     </span>
 
   
@@ -195,139 +501,14 @@
     
     <div class="post-body" itemprop="articleBody">
           <p>在RDMA网络编程中，QP的作用类似于TCP中的socket，可见QP的重要程度。本文介绍QP的基本概念，以及IB Verbs中与QP相关的接口。</p>
-<h2 id="QP状态机"><a href="#QP状态机" class="headerlink" title="QP状态机"></a>QP状态机</h2><p>在一个QP的生命周期中,它所处的状态有以下几种情况:</p>
-<ul>
-<li><p>Reset - QP被创建后，处于Reset状态</p>
-<ul>
-<li>可以通过调用ibv_modify_qp将QP从任何状态转换至Reset状态</li>
-<li>不能进行post send/recv操作，否则会返回错误</li>
-<li>对方发过来的数据包也会被自动丢弃</li>
-</ul>
-</li>
-<li><p>Initialize (Init) - 调用ibv_modify_qp将QP从Reset转到Init状态</p>
-<ul>
-<li>可以进行post recv操作，不能进行post send操作否则会返回错误</li>
-<li>只能post receive，post send会返回错误</li>
-<li>SWQE/RWQE都不会被处理</li>
-</ul>
-</li>
-<li><p>Ready To Receive (RTR)</p>
-<ul>
-<li>调用ibv_modify_qp将QP从Init转至该状态</li>
-<li>QP只能作为响应的一方(responder)</li>
-<li>只能post receive，post send会返回错误</li>
-<li>只有RWQE会被处理</li>
-<li>进到这个QP的包会被处理，QP只会被动响应发送包(如: data, acks and nacks).</li>
-</ul>
-</li>
-<li><p>Ready To Send (RTS)</p>
-<ul>
-<li>调用ibv_modify_qp将QP从RTR或SQD转至该状态</li>
-<li>QP可以作为请求方(requester)或响应方(responder)</li>
-<li>可以post send/recv</li>
-<li>SWQE/RWQE都会被处理</li>
-<li>QP可以主动发送请求包</li>
-</ul>
-</li>
-<li><p>Send Queue Drained (SQD)</p>
-<ul>
-<li>调用ibv_modify_qp将QP从RTS转至该状态</li>
-<li>可以post send/recv</li>
-<li>正在被处理的SWQE会被继续处理，新post的SWQE不会被处理</li>
-</ul>
-</li>
-<li><p>Send Queue Error (SQE)</p>
-<ul>
-<li>除了RC类型的QP，其他所有QP在RTS状态下发送数据包遇到错误时，会自动转至到该状态。</li>
-<li>SQ中剩下的所有SWQE都会返回错误。</li>
-<li>可以调用ibv_modify_qp返回至RTS状态</li>
-<li>可以post send/recv，send会立即返回错误，recv会被正常处理</li>
-</ul>
-</li>
-<li><p>Error</p>
-<ul>
-<li>调用ibv_modify_qp将QP从任何状态转至该状态</li>
-<li>RC类型的QP在RTS状态下发送数据包遇到错误或任何类型QP接收出错，会自动转至该状态</li>
-<li>可以post send/recv，但是会立即返回错误</li>
-</ul>
-</li>
-</ul>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>下表总结了QP在每个状态下的行为。</p>
-<table>
-<thead>
-<tr>
-<th></th>
-<th>Reset</th>
-<th>Init</th>
-<th>RTR</th>
-<th>RTS</th>
-<th>SQD</th>
-<th>SQE</th>
-<th>Error</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>Post receive</td>
-<td>Disallowed</td>
-<td>Allowed</td>
-<td>Allowed</td>
-<td>Allowed</td>
-<td>Allowed</td>
-<td>Allowed</td>
-<td>Allowed</td>
-</tr>
-<tr>
-<td>Post send</td>
-<td>Disallowed</td>
-<td>Disallowed</td>
-<td>Disallowed</td>
-<td>Allowed</td>
-<td>Allowed</td>
-<td>Allowed</td>
-<td>Allowed</td>
-</tr>
-<tr>
-<td>RWQE</td>
-<td>Not processed</td>
-<td>Not processed</td>
-<td>Processed</td>
-<td>Processed</td>
-<td>Processed</td>
-<td>Processed</td>
-<td>Flushed with error</td>
-</tr>
-<tr>
-<td>SWQE</td>
-<td>Not processed</td>
-<td>Not processed</td>
-<td>Not processed</td>
-<td>Processed</td>
-<td>New WRs aren’t processed</td>
-<td>Flushed with error</td>
-<td>Flushed with error</td>
-</tr>
-<tr>
-<td>Incoming packets</td>
-<td>Silently dropped</td>
-<td>Silently dropped</td>
-<td>Handled</td>
-<td>Handled</td>
-<td>Handled</td>
-<td>Handled</td>
-<td>Silently dropped</td>
-</tr>
-<tr>
-<td>Outgoing packets</td>
-<td>None</td>
-<td>None</td>
-<td>None</td>
-<td>Initiated</td>
-<td>Initiated</td>
-<td>None</td>
-<td>None</td>
-</tr>
-</tbody></table>
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2023/04/10/QP/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -381,9 +562,15 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
-      
 
-      <time title="创建时间：2023-04-10 14:46:08 / 修改时间：15:42:02" itemprop="dateCreated datePublished" datetime="2023-04-10T14:46:08+08:00">2023-04-10</time>
+      <time title="创建时间：2023-04-10 14:46:08" itemprop="dateCreated datePublished" datetime="2023-04-10T14:46:08+08:00">2023-04-10</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-04-13 15:14:07" itemprop="dateModified" datetime="2023-04-13T15:14:07+08:00">2023-04-13</time>
     </span>
 
   
@@ -397,38 +584,14 @@
     
     <div class="post-body" itemprop="articleBody">
           <p>OpenFabrics Enterprise Distribution(OFED)是一个软件包，它打包了所有Linux支持RDMA协议所需的组件，包括用户态库和内核驱动等，具体介绍如下：</p>
-<h2 id="应用程序库"><a href="#应用程序库" class="headerlink" title="应用程序库"></a>应用程序库</h2><ul>
-<li>诊断工具 - 调试、诊断IB网络</li>
-<li>子网管理(OpenSM) - 管理、配置IB网络</li>
-<li>消息传递接口(MPI)库 - 用于支持并行应用程序的API接口</li>
-</ul>
-<h2 id="用户级APIs"><a href="#用户级APIs" class="headerlink" title="用户级APIs"></a>用户级APIs</h2><ul>
-<li>RDMA verbs - InfiniBand和iWARP协议定义的RDMA API</li>
-<li>RDMA-CM - 用于支持RDMA CM连接管理通信</li>
-</ul>
-<h2 id="上层协议-ULPs"><a href="#上层协议-ULPs" class="headerlink" title="上层协议(ULPs)"></a>上层协议(ULPs)</h2><p>用于支持RDMA上层协议的内核模块</p>
-<ul>
-<li>IPoIB - 支持IP over InfiniBand协议</li>
-<li>SRP - 支持SCSI RDMA Protocol</li>
-<li>iSER - 支持iSCSI Extensions for RDMA</li>
-</ul>
-<h2 id="中间层"><a href="#中间层" class="headerlink" title="中间层"></a>中间层</h2><p>用于支持用户级程序和内核级模块的内核模块。</p>
-<ul>
-<li>IB core - 在kernel中实现RDMA的核心模块</li>
-<li>CMA - 连接管理模块</li>
-<li>MAD - 用于管理IB网络中的MAD报文</li>
-<li>SA client - 处理子网代理(SA)之间的通信</li>
-</ul>
-<h2 id="供应商驱动"><a href="#供应商驱动" class="headerlink" title="供应商驱动"></a>供应商驱动</h2><p>不同厂商的RDMA设备(HCAs and RNICs)低层级驱动</p>
-<ul>
-<li>Mellanox Technologies</li>
-<li>Intel</li>
-<li>华为</li>
-<li>…</li>
-</ul>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>OFED由很多公司和组织共同维护，大概以六个月为一个周期进行开发、测试和发布。</p>
-<h2 id="相关链接"><a href="#相关链接" class="headerlink" title="相关链接"></a>相关链接</h2><p><a target="_blank" rel="noopener" href="https://www.openfabrics.org/">openfabrics</a><br><a target="_blank" rel="noopener" href="https://github.com/linux-rdma/rdma-core">rdma-core</a></p>
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2023/04/10/%E5%88%9D%E8%AF%86OFED/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -490,7 +653,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-04-10 20:43:07" itemprop="dateModified" datetime="2023-04-10T20:43:07+08:00">2023-04-10</time>
+      <time title="修改时间：2023-04-13 15:14:14" itemprop="dateModified" datetime="2023-04-13T15:14:14+08:00">2023-04-13</time>
     </span>
 
   
@@ -508,46 +671,14 @@
 <li>Linux版本： 5.15.0-58-generic</li>
 <li>CPU指令集架构：x86_64</li>
 </ol>
-<h3 id="环境配置"><a href="#环境配置" class="headerlink" title="环境配置"></a>环境配置</h3><p><strong>安装用户态库和工具</strong></p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ sudo apt-get install build-essential libelf-dev cmake</span><br><span class="line"></span><br><span class="line">$ sudo apt-get install libibverbs1 libibverbs-dev librdmacm1  librdmacm-dev rdmacm-utils ibverbs-utils  libibmad-dev libibumad-dev ibutils</span><br></pre></td></tr></table></figure>
-
-<p><strong>加载RDMA常见的内核模块</strong></p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo modprobe ib_core</span><br><span class="line">sudo modprobe rdma_ucm</span><br></pre></td></tr></table></figure>
-
-<p><strong>Ubuntu 22.04 SoftiWARP</strong><br>在Linux内核5.15版本中，SoftiWARP是主流内核的一部分:<a target="_blank" rel="noopener" href="https://github.com/torvalds/linux/tree/master/drivers/infiniband/sw/siw">Linux siw源码</a>,使用modprobe命令加载siw模块即可。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo modprobe siw</span><br></pre></td></tr></table></figure>
-
-<p><strong>添加rdma新设备</strong><br>执行 ip addr 命令查看系统中所有的网络接口及其配置信息，包括：接口名称、状态、MAC 地址、IP 地址、IPv6 地址、广播地址、网络接口类型等。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">$ ip addr </span><br><span class="line">1: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000</span><br><span class="line">    <span class="built_in">link</span>/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00</span><br><span class="line">    inet 127.0.0.1/8 scope host lo</span><br><span class="line">       valid_lft forever preferred_lft forever</span><br><span class="line">    inet6 ::1/128 scope host </span><br><span class="line">       valid_lft forever preferred_lft forever</span><br><span class="line">2: eth0: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc fq_codel state UP group default qlen 1000</span><br><span class="line">    <span class="built_in">link</span>/ether 00:16:3e:01:78:17 brd ff:ff:ff:ff:ff:ff</span><br><span class="line">    altname enp0s5</span><br><span class="line">    altname ens5</span><br><span class="line">    inet 172.18.96.147/20 metric 100 brd 172.18.111.255 scope global dynamic eth0</span><br><span class="line">       valid_lft 315123385sec preferred_lft 315123385sec</span><br><span class="line">    inet6 fe80::216:3eff:fe01:7817/64 scope <span class="built_in">link</span> </span><br><span class="line">       valid_lft forever preferred_lft forever</span><br></pre></td></tr></table></figure>
-
-<p>执行<code>rdma link add</code>创建一个名为 siw0 和 siw0_lo 的 RDMA 网络接口：</p>
-<ul>
-<li>rdma：表示 RDMA 子系统，用于管理 RDMA 网络接口和 RDMA 设备。</li>
-<li>link：表示创建一个新的 RDMA 网络接口。</li>
-<li>add：表示添加一个新的 RDMA 网络接口。</li>
-<li>siw0：表示要创建的 RDMA 网络接口的名称。</li>
-<li>type siw：表示要使用的 RDMA 驱动程序类型为 siw，即 Softiwarp 驱动程序，它提供了一种基于软件的 RDMA 解决方案。</li>
-<li>netdev eth0：表示底层使用的网络设备为 eth0，即物理网卡的名称。</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ sudo rdma <span class="built_in">link</span> add siw0 <span class="built_in">type</span> siw netdev eth0 </span><br><span class="line">$ sudo rdma <span class="built_in">link</span> add siw0_lo <span class="built_in">type</span> siw netdev lo </span><br></pre></td></tr></table></figure>
-
-<p>执行<code>ibv_devices</code>查看 InfiniBand 和 RoCE 设备。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ ibv_devices</span><br><span class="line">    device                 node GUID</span><br><span class="line">    ------              ----------------</span><br><span class="line">    siw0                02163efffe017817</span><br><span class="line">    siw0_lo             020000fffe000000</span><br></pre></td></tr></table></figure>
-
-<p>查看RDMA设备连接到哪个物理设备:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ rdma -d <span class="built_in">link</span> </span><br><span class="line"><span class="built_in">link</span> siw0/1 state ACTIVE physical_state LINK_UP netdev eth0 netdev_index 2 </span><br><span class="line"><span class="built_in">link</span> siw0_lo/1 state ACTIVE physical_state LINK_UP netdev lo netdev_index 1</span><br></pre></td></tr></table></figure>
-
-<p><strong>删除设备</strong></p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ rdma <span class="built_in">link</span> del siw0_lo</span><br></pre></td></tr></table></figure>
-
-<p><strong>开启调试功能</strong><br>在 Linux 系统中为 siw 内核模块启用/关闭内核动态调试功能，+p 表示启用内核动态调试功能并打印调试信息。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># echo &quot;module siw +p&quot; &gt; /sys/kernel/debug/dynamic_debug/control</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># echo &quot;module siw -p&quot; &gt; /sys/kernel/debug/dynamic_debug/control</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="rping测试"><a href="#rping测试" class="headerlink" title="rping测试"></a>rping测试</h3><p><a target="_blank" rel="noopener" href="https://github.com/linux-rdma/rdma-core/blob/master/librdmacm/examples/rping.c">rping</a> 是一个 RDMA 网络测试工具，用于测试 RDMA 网络接口的性能和可靠性。它在两节点之间建立 CM 连接，进行RDMA ping-pong 测试，以评估 RDMA 网络接口的吞吐量、延迟、带宽等指标。</p>
-<p>rping命令通过参数指定server、clinet等参数，详见：<a target="_blank" rel="noopener" href="https://linux.die.net/man/1/rping%E3%80%82">https://linux.die.net/man/1/rping。</a></p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 开启server，server地址为172.18.96.147</span></span><br><span class="line">$ rping -s -a 172.18.96.147</span><br><span class="line"></span><br><span class="line"><span class="comment"># 开启client，请求连接的server地址为172.18.96.147</span></span><br><span class="line">$ rping -c -a 172.18.96.147 -v</span><br></pre></td></tr></table></figure>
-
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2023/04/09/SoftiWARP%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
