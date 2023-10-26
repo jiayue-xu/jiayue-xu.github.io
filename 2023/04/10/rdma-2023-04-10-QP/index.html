@@ -22,21 +22,21 @@
     <meta name="description" content="在RDMA网络编程中，QP的作用类似于TCP中的socket，可见QP的重要程度。本文介绍QP的基本概念，以及IB Verbs中与QP相关的接口。">
 <meta property="og:type" content="blog">
 <meta property="og:title" content="QP">
-<meta property="og:url" content="https://jiayue-xu.github.io/2023/04/10/QP/index.html">
+<meta property="og:url" content="https://jiayue-xu.github.io/2023/04/10/rdma-2023-04-10-QP/index.html">
 <meta property="og:site_name">
 <meta property="og:description" content="在RDMA网络编程中，QP的作用类似于TCP中的socket，可见QP的重要程度。本文介绍QP的基本概念，以及IB Verbs中与QP相关的接口。">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2023-04-10T08:07:34.000Z">
-<meta property="article:modified_time" content="2023-04-13T07:13:59.815Z">
+<meta property="article:modified_time" content="2023-04-18T12:29:14.235Z">
 <meta property="article:author" content="Jiayue Xu">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="https://jiayue-xu.github.io/2023/04/10/QP/">
+<link rel="canonical" href="https://jiayue-xu.github.io/2023/04/10/rdma-2023-04-10-QP/">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://jiayue-xu.github.io/2023/04/10/QP/","path":"2023/04/10/QP/","title":"QP"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://jiayue-xu.github.io/2023/04/10/rdma-2023-04-10-QP/","path":"2023/04/10/rdma-2023-04-10-QP/","title":"QP"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
 <title>QP | </title>
@@ -86,7 +86,7 @@
 
 
 <nav class="site-nav">
-  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">3</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">6</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">6</span></a></li>
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">16</span></a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">7</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">8</span></a></li><li class="menu-item menu-item-books"><a href="/books/" rel="section"><i class="fa fa-book fa-fw"></i>books</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
   </ul>
 </nav>
 
@@ -111,31 +111,31 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#QP%E7%8A%B6%E6%80%81%E6%9C%BA"><span class="nav-number">1.</span> <span class="nav-text">QP状态机</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#modify-QP"><span class="nav-number">2.</span> <span class="nav-text">modify_QP</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ib-verbs%E6%8E%A5%E5%8F%A3"><span class="nav-number">2.1.</span> <span class="nav-text">ib verbs接口</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A4%BA%E4%BE%8B%EF%BC%9A%E4%BF%AE%E6%94%B9QP%E7%8A%B6%E6%80%81"><span class="nav-number">2.2.</span> <span class="nav-text">示例：修改QP状态</span></a></li></ol></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#QP%E7%8A%B6%E6%80%81%E6%9C%BA"><span class="nav-number">1.</span> <span class="nav-text">QP状态机</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#modify-QP"><span class="nav-number">2.</span> <span class="nav-text">modify_QP</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ib-verbs%E6%8E%A5%E5%8F%A3"><span class="nav-number">2.1.</span> <span class="nav-text">ib verbs接口</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A4%BA%E4%BE%8B%EF%BC%9A%E4%BF%AE%E6%94%B9QP%E7%8A%B6%E6%80%81"><span class="nav-number">2.2.</span> <span class="nav-text">示例：修改QP状态</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#query-QP"><span class="nav-number">3.</span> <span class="nav-text">query_QP</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
         <div class="site-overview-wrap sidebar-panel">
           <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
   <p class="site-author-name" itemprop="name">Jiayue Xu</p>
-  <div class="site-description" itemprop="description">Blog on computer science technology by xjy.</div>
+  <div class="site-description" itemprop="description"></div>
 </div>
 <div class="site-state-wrap animated">
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">6</span>
+          <span class="site-state-item-count">16</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-count">8</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-count">7</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -165,7 +165,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://jiayue-xu.github.io/2023/04/10/QP/">
+    <link itemprop="mainEntityOfPage" href="https://jiayue-xu.github.io/2023/04/10/rdma-2023-04-10-QP/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -174,7 +174,7 @@
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
       <meta itemprop="name" content="">
-      <meta itemprop="description" content="Blog on computer science technology by xjy.">
+      <meta itemprop="description" content="">
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
@@ -201,7 +201,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-04-13 15:13:59" itemprop="dateModified" datetime="2023-04-13T15:13:59+08:00">2023-04-13</time>
+      <time title="修改时间：2023-04-18 20:29:14" itemprop="dateModified" datetime="2023-04-18T20:29:14+08:00">2023-04-18</time>
     </span>
 
   
@@ -351,6 +351,7 @@
 </tbody></table>
 <h2 id="modify-QP"><a href="#modify-QP" class="headerlink" title="modify_QP"></a>modify_QP</h2><p>应用程序在创建一个QP后，可以通过调用ibv_modify_qp设置该QP的属性，包括QP的所处的状态、所属的端口号等。</p>
 <h3 id="ib-verbs接口"><a href="#ib-verbs接口" class="headerlink" title="ib verbs接口"></a>ib verbs接口</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;infiniband/verbs.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">ibv_modify_qp</span><span class="params">(<span class="keyword">struct</span> ibv_qp *qp, <span class="keyword">struct</span> ibv_qp_attr *attr,</span></span><br><span class="line"><span class="params">                         <span class="type">int</span> attr_mask)</span>;</span><br></pre></td></tr></table></figure>
+
 <ul>
 <li>qp - 要修改的QP对象</li>
 <li>attr - attr指定了要修改的属性值</li>
@@ -360,6 +361,12 @@
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">ibv_qp_attr</span> <span class="title">attr</span>;</span></span><br><span class="line">    <span class="type">int</span> flags;</span><br><span class="line">    <span class="type">int</span> rc;</span><br><span class="line">    <span class="built_in">memset</span>(&amp;attr, <span class="number">0</span>, <span class="keyword">sizeof</span>(attr));</span><br><span class="line">    </span><br><span class="line">    attr.qp_state = IBV_QPS_RTS;</span><br><span class="line">    attr.timeout = <span class="number">0x12</span>;</span><br><span class="line">    attr.retry_cnt = <span class="number">6</span>;</span><br><span class="line">    attr.rnr_retry = <span class="number">0</span>;</span><br><span class="line">    attr.sq_psn = <span class="number">0</span>;</span><br><span class="line">    attr.max_rd_atomic = <span class="number">1</span>;</span><br><span class="line">    </span><br><span class="line">    flags = IBV_QP_STATE | IBV_QP_TIMEOUT | IBV_QP_RETRY_CNT |</span><br><span class="line">            IBV_QP_RNR_RETRY | IBV_QP_SQ_PSN | IBV_QP_MAX_QP_RD_ATOMIC;</span><br><span class="line">    </span><br><span class="line">    rc = ibv_modify_qp(qp, &amp;attr, flags);</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
 
 <p>其中，<code>attr.timeout = 0x12</code>将ACK超时时间属性的值设置为0x12，并通过置位<code>attr_mask</code>中的<code>IBV_QP_TIMEOUT</code>将该属性置为有效。应用程序由此告诉底层驱动，希望将这个RC类型的QP所在的路径上的ACK超时时间设置为0x12（具体含义见协议）。</p>
+<h2 id="query-QP"><a href="#query-QP" class="headerlink" title="query_QP"></a>query_QP</h2><p>在测试RC类型QP接收时，发现与IB Verbs相比，RDMA Verbs在创建QP后会调用ibv_query_qp查询QP的属性。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;infiniband/verbs.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">ibv_query_qp</span><span class="params">(<span class="keyword">struct</span> ibv_qp *qp, <span class="keyword">struct</span> ibv_qp_attr *attr,</span></span><br><span class="line"><span class="params">                <span class="type">int</span> attr_mask,</span></span><br><span class="line"><span class="params">                <span class="keyword">struct</span> ibv_qp_init_attr *init_attr)</span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>attr_mask - 指定要查询的QP属性有哪些</li>
+</ul>
 
     </div>
 
@@ -377,7 +384,7 @@
   </li>
   <li class="post-copyright-link">
       <strong>本文链接：</strong>
-      <a href="https://jiayue-xu.github.io/2023/04/10/QP/" title="QP">https://jiayue-xu.github.io/2023/04/10/QP/</a>
+      <a href="https://jiayue-xu.github.io/2023/04/10/rdma-2023-04-10-QP/" title="QP">https://jiayue-xu.github.io/2023/04/10/rdma-2023-04-10-QP/</a>
   </li>
   <li class="post-copyright-license">
       <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -390,7 +397,7 @@
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/2023/04/10/%E5%88%9D%E8%AF%86OFED/" rel="prev" title="初识OFED">
+                <a href="/2023/04/10/rdma-2023-04-10-%E5%88%9D%E8%AF%86OFED/" rel="prev" title="初识OFED">
                   <i class="fa fa-chevron-left"></i> 初识OFED
                 </a>
             </div>

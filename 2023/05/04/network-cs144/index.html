@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 5.4.2">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha256-HtsXJanqjKTc8vVQjO4YMhiqFoXkfBsjBWcX91T1jr8=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"jiayue-xu.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.15.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="Lab0 ByteStream配置环境1234567$ git clone https:&#x2F;&#x2F;github.com&#x2F;cs144&#x2F;minnow$ cd minnow$ git remote add jiayue-xu https:&#x2F;&#x2F;github.com&#x2F;jiayue-xu&#x2F;Minnow-TCP.git$ git push -u jiayue-xu main">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="CS144 2023 Spring课程实验总结">
+<meta property="og:url" content="https://jiayue-xu.github.io/2023/05/04/network-cs144/index.html">
+<meta property="og:site_name">
+<meta property="og:description" content="Lab0 ByteStream配置环境1234567$ git clone https:&#x2F;&#x2F;github.com&#x2F;cs144&#x2F;minnow$ cd minnow$ git remote add jiayue-xu https:&#x2F;&#x2F;github.com&#x2F;jiayue-xu&#x2F;Minnow-TCP.git$ git push -u jiayue-xu main">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-05-04T11:51:35.000Z">
+<meta property="article:modified_time" content="2023-05-23T11:59:32.540Z">
+<meta property="article:author" content="Jiayue Xu">
+<meta property="article:tag" content="network">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://jiayue-xu.github.io/2023/05/04/network-cs144/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://jiayue-xu.github.io/2023/05/04/network-cs144/","path":"2023/05/04/network-cs144/","title":"CS144 2023 Spring课程实验总结"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>CS144 2023 Spring课程实验总结 | </title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title"></p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">16</span></a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">7</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">8</span></a></li><li class="menu-item menu-item-books"><a href="/books/" rel="section"><i class="fa fa-book fa-fw"></i>books</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Lab0-ByteStream"><span class="nav-number">1.</span> <span class="nav-text">Lab0 ByteStream</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E7%8E%AF%E5%A2%83"><span class="nav-number">1.1.</span> <span class="nav-text">配置环境</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#in-memory-stream"><span class="nav-number">1.2.</span> <span class="nav-text">in-memory stream</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#cmake"><span class="nav-number">1.3.</span> <span class="nav-text">cmake</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Lab1-Lab2-TCPReceiver"><span class="nav-number">2.</span> <span class="nav-text">Lab1~Lab2 TCPReceiver</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#optional"><span class="nav-number">2.1.</span> <span class="nav-text">optional</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#explicit"><span class="nav-number">2.2.</span> <span class="nav-text">explicit</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#random-ISN"><span class="nav-number">2.3.</span> <span class="nav-text">random ISN</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Lab3-TCPSender"><span class="nav-number">3.</span> <span class="nav-text">Lab3 TCPSender</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Network-Layer"><span class="nav-number">4.</span> <span class="nav-text">Network Layer</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Jiayue Xu</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">16</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://jiayue-xu.github.io/2023/05/04/network-cs144/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Jiayue Xu">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="CS144 2023 Spring课程实验总结 | ">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          CS144 2023 Spring课程实验总结
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-05-04 19:51:35" itemprop="dateCreated datePublished" datetime="2023-05-04T19:51:35+08:00">2023-05-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-05-23 19:59:32" itemprop="dateModified" datetime="2023-05-23T19:59:32+08:00">2023-05-23</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" itemprop="url" rel="index"><span itemprop="name">计算机网络</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h2 id="Lab0-ByteStream"><a href="#Lab0-ByteStream" class="headerlink" title="Lab0 ByteStream"></a>Lab0 ByteStream</h2><h3 id="配置环境"><a href="#配置环境" class="headerlink" title="配置环境"></a>配置环境</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$ git <span class="built_in">clone</span> https://github.com/cs144/minnow</span><br><span class="line"></span><br><span class="line">$ <span class="built_in">cd</span> minnow</span><br><span class="line"></span><br><span class="line">$ git remote add jiayue-xu https://github.com/jiayue-xu/Minnow-TCP.git</span><br><span class="line"></span><br><span class="line">$ git push -u jiayue-xu main</span><br></pre></td></tr></table></figure>
+
+<span id="more"></span>
+
+<h3 id="in-memory-stream"><a href="#in-memory-stream" class="headerlink" title="in-memory stream"></a>in-memory stream</h3><p>第一个任务是调用Minnow库用C++封装的sokcet接口写一个应用程序。第二个任务是实现一个内存中的抽象字节流<strong>ByteStream</strong>，需要知道C++的继承特性、C++11标准库中的string、C++17中的string_view。</p>
+<h3 id="cmake"><a href="#cmake" class="headerlink" title="cmake"></a>cmake</h3><ul>
+<li><a target="_blank" rel="noopener" href="https://www.gnu.org/software/make/manual/make.html#Reading">GUN make</a></li>
+<li><a target="_blank" rel="noopener" href="https://cmake.org/cmake/help/latest/guide/tutorial/index.html">CMake</a></li>
+</ul>
+<p>项目使用cmake进行构建，需要了解cmake语法，比如：</p>
+<ul>
+<li><p><code>cmake_minimum_required(VERSION 3.24.2)</code> - 指定这个项目所需的最低cmake版本</p>
+</li>
+<li><p><code>project(minnow CXX)</code> - 定义了项目名称为 “minnow”，支持的编程语言为C++</p>
+</li>
+<li><p><code>set(VARIABLE value)</code> - 定义变量</p>
+<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 定义了一个名为MY_VAR的变量，并将其设置为hello</span></span><br><span class="line"><span class="keyword">set</span>(MY_VAR <span class="string">&quot;hello&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义名为MY_LIST的列表变量，并将其设置为包含三个元素的列表</span></span><br><span class="line"><span class="keyword">set</span>(MY_LIST <span class="string">&quot;item1&quot;</span> <span class="string">&quot;item2&quot;</span> <span class="string">&quot;item3&quot;</span>)</span><br></pre></td></tr></table></figure></li>
+<li><p><code>$&#123;VARIABLE&#125;</code>- 变量替换语法，将变量的值嵌入到一个字符串中，变量名可以是cmake内置变量、用户定义的变量或其他可用的变量</p>
+</li>
+<li><p>条件执行语句的语法为</p>
+<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(condition expression)</span><br><span class="line">    ...</span><br><span class="line"><span class="keyword">endif</span>()</span><br></pre></td></tr></table></figure></li>
+<li><p><code>include(file)</code> - include命令用于包含其他cmake脚本文件，将指定的脚本文件中的命令插入到当前的CMakeLists.txt文件中。<code>include</code>命令可以将大项目分解为多个独立的cmake脚本文件，并在需要的时候包含它们。被包含的脚本文件中定义的变量、函数和宏也可以在包含它的文件中使用。</p>
+</li>
+<li><p><code>message()</code> - 输出一条消息到控制台，可以使用四种级别，默认为STATUS级别</p>
+<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># STATUS: 输出一般信息</span></span><br><span class="line"><span class="comment"># WARNING: 输出警告信息</span></span><br><span class="line"><span class="comment"># AUTHOR_WARNING: 输出作者级别的警告信息</span></span><br><span class="line"><span class="comment"># FATAL_ERROR: 输出致命错误信息并停止CMake的运行</span></span><br><span class="line"><span class="keyword">message</span>([&lt;mode&gt;] <span class="string">&quot;message to display&quot;</span> ...)</span><br></pre></td></tr></table></figure></li>
+<li><p><code>include_directories()</code> - 将指定目录添加到包含文件搜索路径中，帮助编译器找到头文件</p>
+</li>
+<li><p><code>add_subdirectory()</code> - 添加一个子目录，并在该子目录中执行另一个CMakeLists.txt文件。在顶层CMakeLists.txt文件中使用该命令可以将整个CMake项目拆分为多个子目录和模块，每个子目录和模块都可以独立构建和测试。这种方式可以使CMake项目更加模块化和可维护，使开发人员更容易理解和修改项目的结构和功能。</p>
+</li>
+<li><p>注意：<code>include</code>和<code>add_subdirectory</code>都是CMake中用于包含其他CMake脚本的命令，但它们有一些不同之处。include命令用于在当前CMake脚本中包含另一个CMake脚本，被包含的脚本与当前脚本在同一个CMake运行环境中执行，可以共享变量和命令。add_subdirectory命令用于向CMake项目中添加一个子目录，并在该子目录中执行另一个CMakeLists.txt文件。被添加的子目录具有独立的构建环境，可以定义自己的变量和命令，但与父目录的变量和命令不共享,子目录可以定义自己的库构建规则，并可以使用父目录中定义的变量，但不能修改父目录中的变量。</p>
+</li>
+</ul>
+<h2 id="Lab1-Lab2-TCPReceiver"><a href="#Lab1-Lab2-TCPReceiver" class="headerlink" title="Lab1~Lab2 TCPReceiver"></a>Lab1~Lab2 TCPReceiver</h2><p>Lab1 实现<strong>Reassembler</strong>，Lab2 实现<strong>Warp32</strong>和<strong>TCPReceiver</strong>。这个部分用到了一些C++11及以上的特性：</p>
+<h3 id="optional"><a href="#optional" class="headerlink" title="optional"></a>optional</h3><p>TCPReceiver的send方法的返回值为TCPReceiverMessage结构体，这个结构体中的ackno字段的类型为<code>std::optional&lt;Wrap32&gt;</code>，<code>std::optional&lt;&gt;</code>是在C++17标准库中添加的新组件。</p>
+<p>在实际编程中，我们通常需要给函数传递参数或在函数体结束前返回值，有时候传递的变量是有明确意义的，但有时又不需要传递有实际意义的值。在过去，这个语义可以由指针来表示，用<code>nullptr</code>表示无需传递值，但是指针的使用会带来潜在的各种风险。因此，提出了<code>std::optional&lt;&gt;</code>提供更加安全的表示方式，optional对象内部使用<code>bool</code>成员变量表示值是否存在，它实际占用的内存最多只比原对象大一个字节。</p>
+<p>示例1：使用<code>optional</code>作为返回值</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;optional&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;string&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function">std::optional&lt;<span class="type">int</span>&gt; <span class="title">asInt</span><span class="params">(<span class="type">const</span> std::string &amp;s)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> std::<span class="built_in">stoi</span>(s);</span><br><span class="line">  &#125; <span class="built_in">catch</span> (...) &#123;</span><br><span class="line">    <span class="keyword">return</span> std::<span class="literal">nullopt</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">auto</span> s : &#123;<span class="string">&quot;42&quot;</span>, <span class="string">&quot; 077&quot;</span>, <span class="string">&quot;hello&quot;</span>, <span class="string">&quot;0x33&quot;</span>&#125;) &#123;</span><br><span class="line">    std::optional&lt;<span class="type">int</span>&gt; oi = <span class="built_in">asInt</span>(s);</span><br><span class="line">    <span class="keyword">if</span> (oi) &#123;</span><br><span class="line">      std::cout &lt;&lt; <span class="string">&quot;convert &#x27;&quot;</span> &lt;&lt; s &lt;&lt; <span class="string">&quot;&#x27; to int:&quot;</span> &lt;&lt; *oi &lt;&lt; std::endl;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      std::cout &lt;&lt; <span class="string">&quot;can&#x27;t convert &#x27;&quot;</span> &lt;&lt; s &lt;&lt; <span class="string">&quot;&#x27; to int\n&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (oi.<span class="built_in">has_value</span>()) &#123;</span><br><span class="line">      std::cout &lt;&lt; <span class="string">&quot;convert &#x27;&quot;</span> &lt;&lt; s &lt;&lt; <span class="string">&quot;&#x27; to int:&quot;</span> &lt;&lt; oi.<span class="built_in">value</span>() &lt;&lt; std::endl;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="explicit"><a href="#explicit" class="headerlink" title="explicit"></a>explicit</h3><p><code>Wrap32</code>的构造函数接收一个<code>uint32_t</code>类型的参数，因此会作为隐式转换规则，为了阻止不想要的隐式转换，在构造函数前添加<code>explicit</code>关键词。<code>explicit</code>只需要加在构造函数的声明前，在<code>.cc</code>文件中具体实现时不要加。</p>
+<h3 id="random-ISN"><a href="#random-ISN" class="headerlink" title="random ISN"></a>random ISN</h3><p>TCP字节流中的每一个字节都有一个序号，初始序列号(ISN)用来表示字节流的起始字节，是一个随机的32位数字，而不是简单的设置为0。因为可能存在这样的情况，上一个采用相同端口号的TCP连接刚刚关闭，它们的字节流可能在网络中传输，如果ISN从0开始，新的TCP连接把上一次连接迟来的数据误认为是自己的数据的可能性很大；此外采用随机的ISN可以增加安全性。</p>
+<p>在C++中，<code>&lt;random&gt;</code>头文件提供了用于生成随机数的类和函数。这个头文件包含了三个主要的类：<code>std::random_device</code>、<code>std::mt19937</code>和 <code>std::uniform_int_distribution</code>。<code>std::random_device</code>是一个硬件随机数生成器，它提供了一个生成器种子。<code>std::mt19937</code>类是一个伪随机数生成器，它可以根据给定的种子生成随机数。<code>std::uniform_int_distribution</code>类是一个分布器，它可以生成均匀分布的整数。<br>实际上，在C++11标准之前，C和C++程序依赖于C库中的<code>rand</code>函数产生伪随机数。<code>rand</code>函数的产生的随机数范围有限(0~32767)，且不能产生浮点随机数，不能产生分布不均匀的随机数分布。11标准加入的一些功能解决了这些问题，<code>engine</code>用于生成一组<code>unsigned</code>类型的随机数，<code>distributiony</code>用于指定随机数范围、随机数类型、随机分布类型。</p>
+<p>在Minnow中使用的是<code>std::random_device</code>硬件随机数生成器，在<code>util/random.cc</code>中定义了如下函数：返回的<code>default_random_engine</code>对象可以被用于生成随机数，传入<code>Wrap32</code>的构造函数，作为TCP字节流的ISN。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">default_random_engine <span class="title">get_random_engine</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">auto</span> rd = <span class="built_in">random_device</span>();</span><br><span class="line">  array&lt;<span class="type">uint32_t</span>, 1024&gt; seed_data &#123;&#125;;</span><br><span class="line">  <span class="built_in">generate</span>( seed_data.<span class="built_in">begin</span>(), seed_data.<span class="built_in">end</span>(), [&amp;] &#123; <span class="keyword">return</span> <span class="built_in">rd</span>(); &#125; );</span><br><span class="line">  <span class="function">seed_seq <span class="title">seed</span><span class="params">( seed_data.begin(), seed_data.end() )</span></span>;</span><br><span class="line">  <span class="keyword">return</span> <span class="built_in">default_random_engine</span>( seed );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Lab3-TCPSender"><a href="#Lab3-TCPSender" class="headerlink" title="Lab3 TCPSender"></a>Lab3 TCPSender</h2><h2 id="Network-Layer"><a href="#Network-Layer" class="headerlink" title="Network Layer"></a>Network Layer</h2><p>网络层中最重要的概念是**转发(forwarding)<strong>和</strong>路由()**。转发是指在单个路由器内将数据包从入站链路传输到出站链路。路由涉及网络中所有的路由器，它们通过路由协议的集体交互决定了数据包从源节点到目标节点的路径。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Jiayue Xu
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://jiayue-xu.github.io/2023/05/04/network-cs144/" title="CS144 2023 Spring课程实验总结">https://jiayue-xu.github.io/2023/05/04/network-cs144/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/network/" rel="tag"># network</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/04/25/paper-MPI-GPUDirect-RDMA-InfiniBand/" rel="prev" title="利用GPUDirect RDMA加速节点间GPU的MPI通信">
+                  <i class="fa fa-chevron-left"></i> 利用GPUDirect RDMA加速节点间GPU的MPI通信
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2023/05/23/network-mpi/" rel="next" title="MPI">
+                  MPI <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Jiayue Xu</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>
