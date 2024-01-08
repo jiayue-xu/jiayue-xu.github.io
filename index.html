@@ -82,7 +82,7 @@
 
 
 <nav class="site-nav">
-  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">3</span></a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">1</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">1</span></a></li><li class="menu-item menu-item-books"><a href="/books/" rel="section"><i class="fa fa-book fa-fw"></i>books</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">7</span></a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">5</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">1</span></a></li><li class="menu-item menu-item-books"><a href="/books/" rel="section"><i class="fa fa-book fa-fw"></i>books</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
   </ul>
 </nav>
 
@@ -119,7 +119,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">3</span>
+          <span class="site-state-item-count">7</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -130,7 +130,7 @@
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-count">5</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -150,6 +150,315 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://jiayue-xu.github.io/2024/01/06/gpu-nccl-makefile/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Jiayue Xu">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | ">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2024/01/06/gpu-nccl-makefile/" class="post-title-link" itemprop="url">NCCL源码学习： Makefile</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-01-06 13:55:14" itemprop="dateCreated datePublished" datetime="2024-01-06T13:55:14+08:00">2024-01-06</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-01-08 21:47:43" itemprop="dateModified" datetime="2024-01-08T21:47:43+08:00">2024-01-08</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p><a target="_blank" rel="noopener" href="https://github.com/NVIDIA/nccl/blob/master/src/Makefile">NCCL Makefile</a>，<code>make build</code>生成目标动态链接库、静态链接库以及需要安装到系统目录中的头文件</p>
+<h1 id="include-xxx-mk"><a href="#include-xxx-mk" class="headerlink" title="include xxx.mk"></a>include xxx.mk</h1><p>在Makefile的一开始使用<code>include</code>指令包含了两个<code>.mk</code>文件</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">include</span> ../makefiles/common.mk</span><br><span class="line"><span class="keyword">include</span> ../makefiles/version.mk</span><br></pre></td></tr></table></figure>
+
+<p>在 Makefile 中，<code>include</code> 是一个指令，用于包含其他 Makefile 或规则文件。当使用 include 指令时，Makefile 会读取并解析指定的文件，并将其内容合并到当前的 Makefile 中，这样可以将多个 Makefile 或规则文件组织在一起，使得整个构建过程更模块化和可维护。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2024/01/06/gpu-nccl-makefile/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://jiayue-xu.github.io/2024/01/05/tips-perf-analysis-tuning/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Jiayue Xu">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | ">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2024/01/05/tips-perf-analysis-tuning/" class="post-title-link" itemprop="url">使用perf进行网络性能分析及调优</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2024-01-05 20:57:43 / 修改时间：21:08:45" itemprop="dateCreated datePublished" datetime="2024-01-05T20:57:43+08:00">2024-01-05</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>在实现一个系统之后，我们总希望能够优化它的性能。一开始的性能调优进展通常比较顺利，当我们把该优化的代码都优化了，但是系统的整体性能还是不如预期时，我们就开始像无头苍蝇开始胡乱猜测了，甚至无从下手。好在同门和我分享了perf这个性能分析工具，我看到了perf在分析网卡延时性能时的方便之处，在此对perf进行学习与总结。</p>
+<p>先说说perf可以做到什么。</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://jiayue-xu.github.io/2024/01/05/tips-avx-illegal-instruction/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Jiayue Xu">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | ">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2024/01/05/tips-avx-illegal-instruction/" class="post-title-link" itemprop="url">处理器不支持AVX指令引起的Illegal Instruction(core dumped)</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-01-05 18:59:11" itemprop="dateCreated datePublished" datetime="2024-01-05T18:59:11+08:00">2024-01-05</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://jiayue-xu.github.io/2024/01/04/tips-use-src-rpm/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Jiayue Xu">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | ">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2024/01/04/tips-use-src-rpm/" class="post-title-link" itemprop="url">如何使用rpm源码</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-01-04 13:55:52" itemprop="dateCreated datePublished" datetime="2024-01-04T13:55:52+08:00">2024-01-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-01-05 18:55:59" itemprop="dateModified" datetime="2024-01-05T18:55:59+08:00">2024-01-05</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>有时候我们希望在现有源码基础上添加一些新特性，在此记录一下怎么使用rpm源码安装软件包。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2024/01/04/tips-use-src-rpm/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -187,9 +496,15 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
-      
 
-      <time title="创建时间：2024-01-03 19:06:33 / 修改时间：20:58:31" itemprop="dateCreated datePublished" datetime="2024-01-03T19:06:33+08:00">2024-01-03</time>
+      <time title="创建时间：2024-01-03 19:06:33" itemprop="dateCreated datePublished" datetime="2024-01-03T19:06:33+08:00">2024-01-03</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-01-04 13:56:27" itemprop="dateModified" datetime="2024-01-04T13:56:27+08:00">2024-01-04</time>
     </span>
 
   
@@ -202,30 +517,15 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <p>事情是这样的，我使用别人为我提供的一个软件包，这个软件包依赖于现有内核源码树的模块A，并提供了内核驱动模块B，而我的上层应用程序依赖于这个软件包。当时，我想在内核模块A和B中添加一些打印信息，重新编译并加载到系统中，覆盖原有的模块。但是当我在<code>rpmbuild</code>目录下执行<code>rpmbuild -ba module_name.spec</code>命令的时候，终端提示我修改的行数超出了限制，并且提示了一些与<strong>patch</strong>相关的错误信息。</p>
-<p>很自然地，我首先去查找了一些有关<code>.spec</code>文件的信息，因为我不确定报错信息是否来自这个文件。</p>
-<p>在我们使用RPM(RedHat Package Manager)构建软件包时，<code>.spec</code>包含了软件包元数据、文件列表、依赖关系信息，以及构建、打包和安装RPM软件包所需的信息和指令。<code>.spec</code>文件使用RPM的宏语言来编写，具体语法就不说了，来看看这个文件在报错之前都依次做了什么吧。</p>
-<ol>
-<li><code>rpmbuild -ba .spec</code>首先解析<code>.spec</code>文件，检查构建环境是否满足软件包的依赖关系和构建要求，检查所需编译器、库文件和其它构建工具是否存在，并进行版本匹配。</li>
-<li>准备构建环境，rpmbuild会在BUILD目录下解压目标代码和必要的文件。</li>
-<li>执行%prep阶段：根据<code>.spec</code>文件中定义的%prep指令，应用补丁patch等工作。</li>
-<li>执行%build阶段：编译源代码、链接可执行文件和生成库文件等。</li>
-<li>执行%install阶段：将构建好的文件安装到BUILD临时目录中，包括可执行文件、库文件等必要文件。</li>
-<li>执行%file阶段：根据文件列表创建软件包的文件清单，并将rpm格式软件包复制到BUILD目录下。</li>
-</ol>
-<p>通过查看输出信息，发现报错来自于第3步，“应用补丁”。在第3步中执行了解压自第2步的<code>configure</code>配置文件，在这个文件中判断是否存在<code>backports_applied</code>文件，若不存在，会检查目前的源代码与.patch文件中的git commit记录是否存在冲突，由于我添加的打印信息与补丁存在冲突，因此报错了。</p>
-<p>所谓的Backport patches（后移补丁）是将较新版本软件中的功能或修复补丁应用到较旧版本软件中的一种技术。它的主要目的是在不升级整个软件版本的情况下，将新功能或修复应用到已经发布的较旧版本中。Backport patches 的作用有以下几个方面：</p>
-<ul>
-<li><p>引入新功能：通过应用 backport patches，可以将较新版本软件中的新功能引入到较旧版本中。这样，用户可以在不升级整个软件版本的情况下，享受到新功能带来的好处。</p>
-</li>
-<li><p>修复漏洞和问题：较旧版本的软件可能存在已知的漏洞或问题。通过应用 backport patches，可以将较新版本中已经修复的漏洞或问题的修补程序应用到较旧版本中，从而提高软件的安全性和稳定性。</p>
-</li>
-<li><p>向后兼容性：有时，较新版本的软件可能引入了不兼容的更改，这可能会导致与旧版本软件集成的问题。通过应用 backport patches，可以将较新版本中的向后兼容性修复应用到较旧版本中，以确保与现有集成环境的兼容性。</p>
-</li>
-</ul>
-<p>总之，backport patches 可以帮助在不升级整个软件版本的情况下，通过将较新版本的功能和修复应用到较旧版本中，提供更好的软件体验、解决安全问题和增强兼容性。它是在不破坏现有稳定版本的前提下，实现功能和修复的一种有效方法。</p>
-<p>因此，绕开这个问题的一个办法是手动创建<code>backports_applied</code>文件，另一个办法是用diff文件得到添加打印后的.patch文件，并更新backports目录中对应的.patch文件。</p>
-
+          <p>事情是这样的，我使用别人为我提供的一个软件包，这个软件包依赖于现有内核源码树的模块A，并提供了内核驱动模块B，而我的上层应用程序依赖于这个软件包。而我想在内核模块A和B中添加一些打印信息，重新编译并加载到系统中，覆盖原有的模块。但是当我在<code>rpmbuild</code>目录下执行<code>rpmbuild -ba module_name.spec</code>命令的时候，终端提示我修改的行数超出了限制，并且提示了一些与<strong>patch</strong>相关的错误信息。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2024/01/03/os-exploer-kernel-patch/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 

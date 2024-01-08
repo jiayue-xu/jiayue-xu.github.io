@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 5.4.2">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha256-HtsXJanqjKTc8vVQjO4YMhiqFoXkfBsjBWcX91T1jr8=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"jiayue-xu.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.15.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="NCCL Makefile，make build生成目标动态链接库、静态链接库以及需要安装到系统目录中的头文件 include xxx.mk在Makefile的一开始使用include指令包含了两个.mk文件 12include ..&#x2F;makefiles&#x2F;common.mkinclude ..&#x2F;makefiles&#x2F;version.mk  在 Makefile 中，include 是一个指令，用于包">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="NCCL源码学习： Makefile">
+<meta property="og:url" content="https://jiayue-xu.github.io/2024/01/06/gpu-nccl-makefile/index.html">
+<meta property="og:site_name">
+<meta property="og:description" content="NCCL Makefile，make build生成目标动态链接库、静态链接库以及需要安装到系统目录中的头文件 include xxx.mk在Makefile的一开始使用include指令包含了两个.mk文件 12include ..&#x2F;makefiles&#x2F;common.mkinclude ..&#x2F;makefiles&#x2F;version.mk  在 Makefile 中，include 是一个指令，用于包">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2024-01-06T05:55:14.000Z">
+<meta property="article:modified_time" content="2024-01-08T13:47:43.390Z">
+<meta property="article:author" content="Jiayue Xu">
+<meta property="article:tag" content="network">
+<meta property="article:tag" content="nccl">
+<meta property="article:tag" content="gpu">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://jiayue-xu.github.io/2024/01/06/gpu-nccl-makefile/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://jiayue-xu.github.io/2024/01/06/gpu-nccl-makefile/","path":"2024/01/06/gpu-nccl-makefile/","title":"NCCL源码学习： Makefile"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>NCCL源码学习： Makefile | </title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title"></p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">7</span></a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">5</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">1</span></a></li><li class="menu-item menu-item-books"><a href="/books/" rel="section"><i class="fa fa-book fa-fw"></i>books</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#include-xxx-mk"><span class="nav-number">1.</span> <span class="nav-text">include xxx.mk</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#wildcard"><span class="nav-number">2.</span> <span class="nav-text">wildcard</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#abspath"><span class="nav-number">3.</span> <span class="nav-text">abspath</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%88%86%E6%94%AF%E8%AF%AD%E5%8F%A5ifeq"><span class="nav-number">4.</span> <span class="nav-text">分支语句ifeq</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5%E5%BA%93%E7%BC%96%E8%AF%91%E9%80%89%E9%A1%B9"><span class="nav-number">5.</span> <span class="nav-text">动态链接库编译选项</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BC%BA%E5%88%B6%E9%87%8D%E6%96%B0%E6%9E%84%E5%BB%BA%E7%9B%AE%E6%A0%87"><span class="nav-number">6.</span> <span class="nav-text">强制重新构建目标</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#include%E6%8C%87%E4%BB%A4"><span class="nav-number">7.</span> <span class="nav-text">-include指令</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-in-%E6%A8%A1%E6%9D%BF%E6%96%87%E4%BB%B6%E7%94%9F%E6%88%90-h%E6%96%87%E4%BB%B6"><span class="nav-number">8.</span> <span class="nav-text">使用.in 模板文件生成.h文件</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#eval-%E5%87%BD%E6%95%B0"><span class="nav-number">8.1.</span> <span class="nav-text">eval 函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8A%91%E5%88%B6%E8%BE%93%E5%87%BA"><span class="nav-number">8.2.</span> <span class="nav-text">@ 抑制输出</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#lt-%E5%92%8C-%E8%87%AA%E5%8A%A8%E5%8F%98%E9%87%8F"><span class="nav-number">8.3.</span> <span class="nav-text">$&lt; 和 $@ 自动变量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sed%E5%91%BD%E4%BB%A4"><span class="nav-number">8.4.</span> <span class="nav-text">sed命令</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%94%9F%E6%88%90%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5%E5%BA%93"><span class="nav-number">9.</span> <span class="nav-text">生成动态链接库</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%94%9F%E6%88%90%E9%9D%99%E6%80%81%E9%93%BE%E6%8E%A5%E5%BA%93"><span class="nav-number">10.</span> <span class="nav-text">生成静态链接库</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%94%9F%E6%88%90pkg-config%E6%96%87%E4%BB%B6"><span class="nav-number">11.</span> <span class="nav-text">生成pkg-config文件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#install%E6%8B%B7%E8%B4%9D%E6%96%87%E4%BB%B6"><span class="nav-number">12.</span> <span class="nav-text">install拷贝文件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%94%9F%E6%88%90-o%E7%9B%AE%E6%A0%87%E6%96%87%E4%BB%B6%E5%8F%8A%E5%85%B6-d%E4%BE%9D%E8%B5%96%E6%96%87%E4%BB%B6"><span class="nav-number">13.</span> <span class="nav-text">生成.o目标文件及其.d依赖文件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%85%B6%E4%BB%96"><span class="nav-number">14.</span> <span class="nav-text">其他</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Jiayue Xu</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">7</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://jiayue-xu.github.io/2024/01/06/gpu-nccl-makefile/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Jiayue Xu">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="NCCL源码学习： Makefile | ">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          NCCL源码学习： Makefile
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-01-06 13:55:14" itemprop="dateCreated datePublished" datetime="2024-01-06T13:55:14+08:00">2024-01-06</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-01-08 21:47:43" itemprop="dateModified" datetime="2024-01-08T21:47:43+08:00">2024-01-08</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p><a target="_blank" rel="noopener" href="https://github.com/NVIDIA/nccl/blob/master/src/Makefile">NCCL Makefile</a>，<code>make build</code>生成目标动态链接库、静态链接库以及需要安装到系统目录中的头文件</p>
+<h1 id="include-xxx-mk"><a href="#include-xxx-mk" class="headerlink" title="include xxx.mk"></a>include xxx.mk</h1><p>在Makefile的一开始使用<code>include</code>指令包含了两个<code>.mk</code>文件</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">include</span> ../makefiles/common.mk</span><br><span class="line"><span class="keyword">include</span> ../makefiles/version.mk</span><br></pre></td></tr></table></figure>
+
+<p>在 Makefile 中，<code>include</code> 是一个指令，用于包含其他 Makefile 或规则文件。当使用 include 指令时，Makefile 会读取并解析指定的文件，并将其内容合并到当前的 Makefile 中，这样可以将多个 Makefile 或规则文件组织在一起，使得整个构建过程更模块化和可维护。</p>
+<span id="more"></span>
+
+<p>在这个源码中，<code>version.mk</code>文件定义了与项目版本号相关的变量</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">##### version</span></span><br><span class="line">NCCL_MAJOR   := 2</span><br><span class="line">NCCL_MINOR   := 19</span><br><span class="line">NCCL_PATCH   := 4</span><br><span class="line">NCCL_SUFFIX  :=</span><br><span class="line">PKG_REVISION := 1</span><br></pre></td></tr></table></figure>
+
+<h1 id="wildcard"><a href="#wildcard" class="headerlink" title="wildcard"></a>wildcard</h1><p>接着定义了需要export的两个头文件，以及一些库源文件，其中定义库源文件时用到了<code>wildcard</code>函数</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">##### src files</span></span><br><span class="line">INCEXPORTS  := nccl.h nccl_net.h</span><br><span class="line">LIBSRCFILES := \</span><br><span class="line">	bootstrap.cc channel.cc collectives.cc debug.cc enqueue.cc group.cc \</span><br><span class="line">	init.cc init_nvtx.cc net.cc proxy.cc transport.cc \</span><br><span class="line">	<span class="variable">$(<span class="built_in">wildcard</span> graph/*.cc)</span> \</span><br><span class="line">	<span class="variable">$(<span class="built_in">wildcard</span> misc/*.cc)</span> \</span><br><span class="line">	<span class="variable">$(<span class="built_in">wildcard</span> transport/*.cc)</span></span><br></pre></td></tr></table></figure>
+
+<p>在 Makefile 中，<code>wildcard</code> 是一个函数，用于在目录中匹配文件名模式，并返回匹配的文件列表。</p>
+<h1 id="abspath"><a href="#abspath" class="headerlink" title="abspath"></a>abspath</h1><p>接着定义了最终要生成的动态链接库、静态链接库、配置信息文件名，以及build的头文件目录、库文件目录、目标文件目录、配置文件目录等，其中在定义构建目录时，使用了<code>abspath</code>函数</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">##### lib files</span></span><br><span class="line">LIBNAME     := libnccl.so</span><br><span class="line">STATICLIBNAME := libnccl_static.a</span><br><span class="line"><span class="comment">##### pkgconfig files</span></span><br><span class="line">PKGCONFIGFILE := nccl.pc</span><br><span class="line"><span class="comment">##### dirs</span></span><br><span class="line">BUILDDIR ?= <span class="variable">$(<span class="built_in">abspath</span> ../build)</span></span><br><span class="line">INCDIR := <span class="variable">$(BUILDDIR)</span>/<span class="keyword">include</span></span><br><span class="line">LIBDIR := <span class="variable">$(BUILDDIR)</span>/lib</span><br><span class="line">OBJDIR := <span class="variable">$(BUILDDIR)</span>/obj</span><br><span class="line">PKGDIR := <span class="variable">$(BUILDDIR)</span>/lib/pkgconfig</span><br></pre></td></tr></table></figure>
+
+<p><code>abspath</code>函数会将文件路径转换成绝对路径。</p>
+<h1 id="分支语句ifeq"><a href="#分支语句ifeq" class="headerlink" title="分支语句ifeq"></a>分支语句ifeq</h1><p>接着判断用户是否传入了CUDARTLIB变量的定义，如果是默认值cudart_static，则将enhcompat.cc加入到变量LIBSRCPILES中，这段逻辑使用Makefile的<code>ifeq</code></p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">##### target files</span></span><br><span class="line">CUDARTLIB  ?= cudart_static</span><br><span class="line"></span><br><span class="line"><span class="keyword">ifeq</span> (<span class="variable">$(CUDARTLIB)</span>, cudart_static)</span><br><span class="line">	LIBSRCFILES += enhcompat.cc</span><br><span class="line"><span class="keyword">endif</span></span><br></pre></td></tr></table></figure>
+
+<p>在 Makefile 中，<code>ifeq</code> 是一个条件判断指令，用于在构建过程中根据条件执行不同的操作。</p>
+<h1 id="动态链接库编译选项"><a href="#动态链接库编译选项" class="headerlink" title="动态链接库编译选项"></a>动态链接库编译选项</h1><p>接着使用<code>%</code>通配符定义了目标头文件、目标动态链接库、每个目标文件所依赖的文件、动态链接编译选项等变量。</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">INCTARGETS := $(INCEXPORTS:%=<span class="variable">$(INCDIR)</span>/%)</span><br><span class="line">LIBSONAME  := $(LIBNAME:%=%.<span class="variable">$(NCCL_MAJOR)</span>)</span><br><span class="line">LIBTARGET  := $(LIBNAME:%=%.<span class="variable">$(NCCL_MAJOR)</span>.<span class="variable">$(NCCL_MINOR)</span>.<span class="variable">$(NCCL_PATCH)</span>)</span><br><span class="line">STATICLIBTARGET := <span class="variable">$(STATICLIBNAME)</span></span><br><span class="line">PKGTARGET  := <span class="variable">$(PKGCONFIGFILE)</span></span><br><span class="line">LIBOBJ     := $(LIBSRCFILES:%.cc=<span class="variable">$(OBJDIR)</span>/%.o)</span><br><span class="line">DEPFILES   := $(LIBOBJ:%.o=%.d)</span><br><span class="line">LDFLAGS    += -L$&#123;CUDA_LIB&#125; -l<span class="variable">$(CUDARTLIB)</span> -lpthread -lrt -ldl</span><br><span class="line"></span><br><span class="line">DEVMANIFEST := <span class="variable">$(BUILDDIR)</span>/obj/device/manifest</span><br></pre></td></tr></table></figure>
+
+<p>在编译源代码时，<code>-L</code> 和 <code>-l</code> 是常用的编译选项，用于指定编译器在链接时搜索库文件的路径和链接库文件。<code>-L</code> 选项用于指定编译器在链接时搜索库文件的路径，后面需要跟着库文件所在的目录路径。<code>-l</code>选项用于指定编译器在链接时要使用的库文件，后面跟着库文件的名称（不包括文件名前缀lib和文件扩展名）。</p>
+<p>编译器解析<code>-l</code>后面的链接库时，会根据指定的名称自动搜索库文件，首先在<code>-L</code>指定的目录中查找，如果没找到会去系统默认查找目录或LD_LIBRARY_PATH环境变量定义的路径下查找，如果没有指定<code>-static</code>选项，会优先查找动态链接库。</p>
+<p>顺带说一下<code>DEVMANIFEST</code>文件：通常用于描述设备驱动程序的清单或配置信息，提供了关于设备驱动程序的元数据、配置选项和相关文件的详细信息。使用 <code>DEVMANIFEST</code> 文件，可以更轻松地管理和配置设备驱动程序，确保其正确安装、编译和运行。</p>
+<h1 id="强制重新构建目标"><a href="#强制重新构建目标" class="headerlink" title="强制重新构建目标"></a>强制重新构建目标</h1><p>这一段例子让目标依赖于<code>ALWAYS_REBUILD</code>，而<code>ALWAYS_REBUILD</code>是一个空目标，从而实现永远重新构建DEVMANIFEST的目的。</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">##### rules</span></span><br><span class="line">build : lib staticlib</span><br><span class="line"></span><br><span class="line">lib : <span class="variable">$(INCTARGETS)</span> <span class="variable">$(LIBDIR)</span>/<span class="variable">$(LIBTARGET)</span> <span class="variable">$(PKGDIR)</span>/<span class="variable">$(PKGTARGET)</span></span><br><span class="line"></span><br><span class="line">staticlib : <span class="variable">$(LIBDIR)</span>/<span class="variable">$(STATICLIBTARGET)</span></span><br><span class="line"></span><br><span class="line"><span class="variable">$(DEVMANIFEST)</span>: ALWAYS_REBUILD <span class="variable">$(INCTARGETS)</span></span><br><span class="line">	<span class="variable">$(MAKE)</span> -C ./device</span><br><span class="line"></span><br><span class="line"><span class="comment"># Empty target to force rebuild</span></span><br><span class="line"><span class="section">ALWAYS_REBUILD:</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="include指令"><a href="#include指令" class="headerlink" title="-include指令"></a>-include指令</h1><p>源码里使用<code>-include</code>包含了前面定义的<code>.d</code>依赖文件</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">-include</span> <span class="variable">$(DEPFILES)</span></span><br><span class="line"><span class="variable">$(LIBDIR)</span>/<span class="variable">$(LIBTARGET)</span> <span class="variable">$(LIBDIR)</span>/<span class="variable">$(STATICLIBTARGET)</span> : <span class="variable">$(LIBOBJ)</span></span><br></pre></td></tr></table></figure>
+
+<p>在 Makefile 中，<code>-include</code> 是一个特殊的指令，用于包含其他文件，通常是用于包含依赖关系文件。在大型项目中，手动维护和更新依赖关系非常复杂和繁琐。为了解决这个问题，可以使用自动生成的依赖关系文件，例如使用 <code>gcc -M</code> 选项生成的文件。这些文件列出了源文件与其依赖项之间的关系。然而，如果依赖关系文件不存在或无效，使用普通的 <code>include</code> 指令将导致 <code>make</code> 命令失败并停止构建。为了避免这种情况，可以使用 <code>-include</code> 指令，也可以写作 <code>--include</code>。</p>
+<p><code>-include</code> 指令会在 Makefile 执行期间读取并包含指定的文件，即使这些文件不存在或无效也不会导致错误。这样，如果依赖关系文件不存在，或者在构建系统中生成依赖关系文件的过程中出现问题，make 命令仍然可以继续执行。</p>
+<h1 id="使用-in-模板文件生成-h文件"><a href="#使用-in-模板文件生成-h文件" class="headerlink" title="使用.in 模板文件生成.h文件"></a>使用.in 模板文件生成.h文件</h1><p>在下面这个片段中，对于<code>nccl.h</code>目标来说，它依赖于<code>nccl.h.in</code>和<code>veriosn.mk</code>文件，其中<code>.in</code>文件作为模板文件，用于生成最终的头文件。<code>.in</code> 文件包含占位符和变量，代表需要在生成过程中替换的值。在这个例子中，使用<code>sed</code>来解析 <code>.in</code> 文件，将占位符替换为实际的值，并生成最终的头文件<code>nccl.h</code>。使用 <code>.in</code> 文件的好处是根据不同环境生成不同版本的头文件。</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$(INCDIR)</span>/nccl.h : nccl.h.in ../makefiles/version.mk</span><br><span class="line">	@<span class="variable">$(<span class="built_in">eval</span> NCCL_VERSION := $(<span class="built_in">shell</span> printf &quot;%d%02d%02d&quot; <span class="variable">$(NCCL_MAJOR)</span> <span class="variable">$(NCCL_MINOR)</span> <span class="variable">$(NCCL_PATCH)</span>)</span>)</span><br><span class="line">	mkdir -p <span class="variable">$(INCDIR)</span></span><br><span class="line">	@printf <span class="string">&quot;Generating %-35s &gt; %s\n&quot;</span> <span class="variable">$&lt;</span> <span class="variable">$@</span></span><br><span class="line">	sed -e <span class="string">&quot;s/\$$&#123;nccl:Major&#125;/<span class="variable">$(NCCL_MAJOR)</span>/g&quot;</span> \</span><br><span class="line">	    -e <span class="string">&quot;s/\$$&#123;nccl:Minor&#125;/<span class="variable">$(NCCL_MINOR)</span>/g&quot;</span> \</span><br><span class="line">	    -e <span class="string">&quot;s/\$$&#123;nccl:Patch&#125;/<span class="variable">$(NCCL_PATCH)</span>/g&quot;</span> \</span><br><span class="line">	    -e <span class="string">&quot;s/\$$&#123;nccl:Suffix&#125;/<span class="variable">$(NCCL_SUFFIX)</span>/g&quot;</span> \</span><br><span class="line">	    -e <span class="string">&quot;s/\$$&#123;nccl:Version&#125;/<span class="variable">$(NCCL_VERSION)</span>/g&quot;</span> \</span><br><span class="line">	    <span class="variable">$&lt;</span> &gt; <span class="variable">$@</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="eval-函数"><a href="#eval-函数" class="headerlink" title="eval 函数"></a>eval 函数</h2><p>eval函数用于在运行时动态为一个变量复制，因为有时候对一个变量的赋值要在运行时才能确定。</p>
+<h2 id="抑制输出"><a href="#抑制输出" class="headerlink" title="@ 抑制输出"></a>@ 抑制输出</h2><p><code>@$(eval ...</code> 中的<code>@</code> 符号告诉 make 工具不要输出该命令的执行过程，在终端上不会显示命令本身，而只会显示它的执行结果。通过使用<code>@</code> 前缀，可以使得 Makefile 的输出更加清晰和简洁，只显示与构建过程相关的信息，而不会混杂着大量的命令执行输出。</p>
+<h2 id="lt-和-自动变量"><a href="#lt-和-自动变量" class="headerlink" title="$&lt; 和 $@ 自动变量"></a>$&lt; 和 $@ 自动变量</h2><p><code>$&lt;</code> 和 <code>$@</code> 是自动变量，用于表示规则中的依赖文件和目标文件的名称，例子中将依赖文件按照左对齐、至少占据35个字符的字符串格式输出。</p>
+<ul>
+<li><code>$&lt;</code>  规则的第一个依赖文件的名称，即<code>nccl.h.in</code></li>
+<li><code>$@</code> 规则的目标文件的名称，即<code>nccl.h</code></li>
+</ul>
+<h2 id="sed命令"><a href="#sed命令" class="headerlink" title="sed命令"></a>sed命令</h2><p><code>sed</code>是stream editor的缩写，用于在文本中替换字符串。例子中将nccl.h.in的占位符替换成正确的版本号，并重定向输出到nccl.h文件中。注意：Makefile中使用<code>$$</code>转义<code>$</code>并传给命令<code>sed</code>，因为Makefile中<code>$</code>有特殊含义</p>
+<h1 id="生成动态链接库"><a href="#生成动态链接库" class="headerlink" title="生成动态链接库"></a>生成动态链接库</h1><p>动态链接库<code>libnccl.so</code>依赖于<code>.o</code>文件，如果需要更新<code>.so</code>文件，会调用C编译器将<code>.o</code>文件与需要的库进行链接，最终生成目标动态链接库。</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$(LIBDIR)</span>/<span class="variable">$(LIBTARGET)</span>: <span class="variable">$(LIBOBJ)</span> <span class="variable">$(DEVMANIFEST)</span></span><br><span class="line">	@printf <span class="string">&quot;Linking    %-35s &gt; %s\n&quot;</span> <span class="variable">$(LIBTARGET)</span> <span class="variable">$@</span></span><br><span class="line">	mkdir -p <span class="variable">$(LIBDIR)</span></span><br><span class="line">	<span class="variable">$(CXX)</span> <span class="variable">$(CXXFLAGS)</span> -shared -Wl,--no-as-needed -Wl,-soname,<span class="variable">$(LIBSONAME)</span> -o <span class="variable">$@</span> <span class="variable">$(LIBOBJ)</span> $<span class="variable">$(cat <span class="variable">$(DEVMANIFEST)</span>)</span> <span class="variable">$(LDFLAGS)</span></span><br><span class="line">	ln -sf <span class="variable">$(LIBSONAME)</span> <span class="variable">$(LIBDIR)</span>/<span class="variable">$(LIBNAME)</span></span><br><span class="line">	ln -sf <span class="variable">$(LIBTARGET)</span> <span class="variable">$(LIBDIR)</span>/<span class="variable">$(LIBSONAME)</span></span><br></pre></td></tr></table></figure>
+
+<p>gcc创建共享库的编译选项：最终生成<code>build/lib/libnccl.so.2.19.4</code></p>
+<ul>
+<li><code>CXX</code> Makefile中预定义的变量，表示当前使用的C编译器，通常为<code>g++</code></li>
+<li><code>CXXFLAGS</code> 一些需要构建共享库的标志位<ul>
+<li><code>-fPIC</code> Position Independent Code，告诉编译器生成与位置无关的代码。</li>
+<li><code>-fvisibility=hidden</code> 控制符号的可见性，默认情况下，编译器将所有符号都导出为公共符号对外可见。使用<code>-fvisibility=hidden</code>选项可以限制库的可见性，只有明确标记为公共的符号才会对外可见，其他符号将被隐藏。</li>
+<li><code>-shared</code> 是一个链接器选项，用于告诉链接器生成一个共享库而不是可执行文件。</li>
+<li><code>-Wl,--no-as-needed</code> 是一个链接器选项，用于告诉链接器不要自动丢弃未使用的共享库依赖项。默认情况下，链接器会尽可能地删除未使用的共享库依赖项，以减少最终生成的共享库文件大小。</li>
+<li><code>-Wl,-soname,$(LIBSONAME)</code>是一个链接器选项，用于指定生成的共享库的 soname，在运行时，程序将使用指定的 soname来查找和加载共享库，在例子里是<code>libnccl.so.2</code>。</li>
+<li><code>$$(cat $(DEVMANIFEST))</code> 转义之后相当于<code>$(cat $(DEVMANIFEST))</code>，把<code>DEVMANIFEST</code>文件中的内容作为文件列表传递给<code>gcc</code>，比如<code>file1.c file2.c file3.c</code>。</li>
+</ul>
+</li>
+</ul>
+<p>创建符号链接：例子创建链接<code>build/lib/libnccl.so</code>，指向<code>libnccl.so.2</code>；以及<code>build/lib/libnccl.so.2</code>，指向<code>libnccl.so.2.19.4</code></p>
+<h1 id="生成静态链接库"><a href="#生成静态链接库" class="headerlink" title="生成静态链接库"></a>生成静态链接库</h1><p>接着使用<code>ar</code>命令创建一个静态库（archive library）。</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$(LIBDIR)</span>/<span class="variable">$(STATICLIBTARGET)</span>: <span class="variable">$(LIBOBJ)</span> <span class="variable">$(DEVMANIFEST)</span></span><br><span class="line">	@printf <span class="string">&quot;Archiving  %-35s &gt; %s\n&quot;</span> <span class="variable">$(STATICLIBTARGET)</span> <span class="variable">$@</span></span><br><span class="line">	mkdir -p <span class="variable">$(LIBDIR)</span></span><br><span class="line">	ar cr <span class="variable">$@</span> <span class="variable">$(LIBOBJ)</span> $<span class="variable">$(cat <span class="variable">$(DEVMANIFEST)</span>)</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="生成pkg-config文件"><a href="#生成pkg-config文件" class="headerlink" title="生成pkg-config文件"></a>生成pkg-config文件</h1><p>接着使用<code>.in</code>模板文件生成<code>.pc</code>文件，使用的方法和前面说的生成<code>nccl.h</code>方式类似。生成的 <code>.pc</code> 文件用于描述库的名称、版本、依赖关系、头文件路径、库路径、安装路径以及编译和链接选项等。</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$(PKGDIR)</span>/nccl.pc : nccl.pc.in</span><br><span class="line">	mkdir -p <span class="variable">$(PKGDIR)</span></span><br><span class="line">	@printf <span class="string">&quot;Generating %-35s &gt; %s\n&quot;</span> <span class="variable">$&lt;</span> <span class="variable">$@</span></span><br><span class="line">	sed -e &#x27;s|$$&#123;nccl:Prefix&#125;|\<span class="variable">$(PREFIX)</span>|g&#x27; \</span><br><span class="line">	    -e <span class="string">&quot;s/\$$&#123;nccl:Major&#125;/<span class="variable">$(NCCL_MAJOR)</span>/g&quot;</span> \</span><br><span class="line">	    -e <span class="string">&quot;s/\$$&#123;nccl:Minor&#125;/<span class="variable">$(NCCL_MINOR)</span>/g&quot;</span> \</span><br><span class="line">	    -e <span class="string">&quot;s/\$$&#123;nccl:Patch&#125;/<span class="variable">$(NCCL_PATCH)</span>/g&quot;</span> \</span><br><span class="line">	    <span class="variable">$&lt;</span> &gt; <span class="variable">$@</span></span><br></pre></td></tr></table></figure>
+
+<p>注意：由于第一条<code>sed</code>命令替换的字符串本身带有<code>/</code>字符，因此可以使用<code>|</code>作为sed命令分隔符，避免对<code>/</code>进行转义</p>
+<h1 id="install拷贝文件"><a href="#install拷贝文件" class="headerlink" title="install拷贝文件"></a>install拷贝文件</h1><p>以下目标的执行命令中，使用<code>install</code>命令复制文件，<code>-m 644</code>设置文件权限，在这里文件权限被设置为<code>-rw-r--r--</code>。</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$(INCDIR)</span>/%.h : %.h</span><br><span class="line">	@printf <span class="string">&quot;Grabbing   %-35s &gt; %s\n&quot;</span> <span class="variable">$&lt;</span> <span class="variable">$@</span></span><br><span class="line">	mkdir -p <span class="variable">$(INCDIR)</span></span><br><span class="line">	install -m 644 <span class="variable">$&lt;</span> <span class="variable">$@</span></span><br><span class="line"></span><br><span class="line"><span class="variable">$(INCDIR)</span>/nccl_%.h : <span class="keyword">include</span>/nccl_%.h</span><br><span class="line">	@printf <span class="string">&quot;Grabbing   %-35s &gt; %s\n&quot;</span> <span class="variable">$&lt;</span> <span class="variable">$@</span></span><br><span class="line">	mkdir -p <span class="variable">$(INCDIR)</span></span><br><span class="line">	install -m 644 <span class="variable">$&lt;</span> <span class="variable">$@</span></span><br><span class="line"></span><br><span class="line"><span class="variable">$(PKGDIR)</span>/%.pc : %.pc</span><br><span class="line">	@printf <span class="string">&quot;Grabbing   %-35s &gt; %s\n&quot;</span> <span class="variable">$&lt;</span> <span class="variable">$@</span></span><br><span class="line">	mkdir -p <span class="variable">$(PKGDIR)</span></span><br><span class="line">	install -m 644 <span class="variable">$&lt;</span> <span class="variable">$@</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="生成-o目标文件及其-d依赖文件"><a href="#生成-o目标文件及其-d依赖文件" class="headerlink" title="生成.o目标文件及其.d依赖文件"></a>生成.o目标文件及其.d依赖文件</h1><p>目标<code>.o</code>文件依赖于<code>.cc</code>和<code>INCTATGETS</code>，执行命令首先编译生成<code>.o</code>文件，<code>-c</code>标志表示不需要链接；接着生成.o文件对应的依赖文件。</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$(OBJDIR)</span>/%.o : %.cc <span class="variable">$(INCTARGETS)</span></span><br><span class="line">	@printf <span class="string">&quot;Compiling  %-35s &gt; %s\n&quot;</span> <span class="variable">$&lt;</span> <span class="variable">$@</span></span><br><span class="line">	mkdir -p `dirname <span class="variable">$@</span>`</span><br><span class="line">	<span class="variable">$(CXX)</span> -I. -I<span class="variable">$(INCDIR)</span> <span class="variable">$(CXXFLAGS)</span> -Iinclude -c <span class="variable">$&lt;</span> -o <span class="variable">$@</span></span><br><span class="line">	@<span class="variable">$(CXX)</span> -I. -I<span class="variable">$(INCDIR)</span> <span class="variable">$(CXXFLAGS)</span> -Iinclude -M <span class="variable">$&lt;</span> &gt; $(@:%.o=%.d.tmp)</span><br><span class="line">	@sed <span class="string">&quot;0,/^.*:/s//$(subst /,\/,<span class="variable">$@</span>):/&quot;</span> $(@:%.o=%.d.tmp) &gt; $(@:%.o=%.d)</span><br><span class="line">	@sed -e &#x27;s/.*://&#x27; -e &#x27;s/\\$$//&#x27; &lt; $(@:%.o=%.d.tmp) | fmt -1 | \</span><br><span class="line">                sed -e &#x27;s/^ *//&#x27; -e &#x27;s/$$/:/&#x27; &gt;&gt; $(@:%.o=%.d)</span><br><span class="line">	@rm -f $(@:%.o=%.d.tmp)</span><br></pre></td></tr></table></figure>
+
+<p>指定了<code>-M</code>选项后，gcc 会分析源代码文件及其包含的头文件，并生成一个描述文件之间依赖关系的文本文件。生成的依赖关系文件通常用于make中的自动化构建过程，它可以告诉make哪些文件需要重新编译，以及它们之间的依赖关系。生成的依赖关系文件内容类似于以下示例：</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">example.o: example.c header1.h header2.h</span></span><br><span class="line"><span class="section">header1.o: header1.h</span></span><br><span class="line"><span class="section">header2.o: header2.h</span></span><br></pre></td></tr></table></figure>
+
+<p>其中，每一行描述一个目标文件及其依赖的头文件。这些信息可以用于构建系统中的规则，以确保在需要时重新编译相关的源代码文件。（在第七点中就有用到依赖文件）</p>
+<p>在例子中，<code>gcc</code>首先生成的是临时依赖文件<code>.d.tmp</code>，再使用<code>sed</code>替换命令将其修改为期望的格式，最终重定向到<code>.d</code>文件中。</p>
+<h1 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h1><p>最后定义了<code>clean</code>、<code>install</code>的行为，其中安装命令就是将build中的文件拷贝到系统目录下，<code>cp -P</code>表示保留链接文件的链接属性，而非拷贝实际文件的内容。<code>formatting.mk</code>则是定义了一些使用<code>astyle</code>修改源码风格的命令，<code>astyle</code>是一个开源的代码格式化工具，用于自动化地调整代码的风格和格式，它支持多种编程语言，包括C、C++、C#、Java等。</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">clean :</span><br><span class="line">	<span class="variable">$(MAKE)</span> -C device clean</span><br><span class="line">	rm -rf $&#123;INCDIR&#125; $&#123;LIBDIR&#125; $&#123;PKGDIR&#125; $&#123;OBJDIR&#125;</span><br><span class="line"></span><br><span class="line">install : build</span><br><span class="line">	mkdir -p <span class="variable">$(PREFIX)</span>/lib</span><br><span class="line">	mkdir -p <span class="variable">$(PREFIX)</span>/lib/pkgconfig</span><br><span class="line">	mkdir -p <span class="variable">$(PREFIX)</span>/<span class="keyword">include</span></span><br><span class="line">	cp -P -v <span class="variable">$(BUILDDIR)</span>/lib/lib* <span class="variable">$(PREFIX)</span>/lib/</span><br><span class="line">	cp -P -v <span class="variable">$(BUILDDIR)</span>/lib/pkgconfig/* <span class="variable">$(PREFIX)</span>/lib/pkgconfig/</span><br><span class="line">	cp -v <span class="variable">$(BUILDDIR)</span>/<span class="keyword">include</span>/* <span class="variable">$(PREFIX)</span>/<span class="keyword">include</span>/</span><br><span class="line"></span><br><span class="line">FILESTOFORMAT := <span class="variable">$(<span class="built_in">shell</span> find . -name &quot;.\#*&quot; -prune -o \( -name &quot;*.cc&quot; -o -name &quot;*.h&quot; \)</span> -print | grep -v -E &#x27;ibvwrap.h|nvmlwrap.h|gdrwrap.h|nccl.h&#x27;)</span><br><span class="line"><span class="comment"># Note that formatting.mk defines a new target so in order to not overwrite the default target,</span></span><br><span class="line"><span class="comment"># it shouldn&#x27;t be included at the top. Also, it uses the above definition of FILESTOFORMAT as well</span></span><br><span class="line"><span class="comment"># as the BUILDDIR variable.</span></span><br><span class="line"><span class="keyword">include</span> ../makefiles/formatting.mk</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Jiayue Xu
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://jiayue-xu.github.io/2024/01/06/gpu-nccl-makefile/" title="NCCL源码学习： Makefile">https://jiayue-xu.github.io/2024/01/06/gpu-nccl-makefile/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/network/" rel="tag"># network</a>
+              <a href="/tags/nccl/" rel="tag"># nccl</a>
+              <a href="/tags/gpu/" rel="tag"># gpu</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2024/01/05/tips-perf-analysis-tuning/" rel="prev" title="使用perf进行网络性能分析及调优">
+                  <i class="fa fa-chevron-left"></i> 使用perf进行网络性能分析及调优
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Jiayue Xu</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>
