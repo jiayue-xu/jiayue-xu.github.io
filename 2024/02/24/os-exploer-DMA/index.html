@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 5.4.2">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha256-HtsXJanqjKTc8vVQjO4YMhiqFoXkfBsjBWcX91T1jr8=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"jiayue-xu.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.15.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="DMA是一种硬件机制，用于支持在外设与主机内存之间直接进行数据读写，而无需CPU的参与。由于CPU全程没有参与，因此硬件需要通过中断信号通知CPU DMA的完成状态。当然CPU也可以选择轮询寄存器的方式获取DMA的完成状态，但这就有点两边都不讨好了，会让CPU和DMA控制器都处于繁忙状态，在重数据轻计算场景下可能会看到这种用法。">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="DMA直接内存访问">
+<meta property="og:url" content="https://jiayue-xu.github.io/2024/02/24/os-exploer-DMA/index.html">
+<meta property="og:site_name">
+<meta property="og:description" content="DMA是一种硬件机制，用于支持在外设与主机内存之间直接进行数据读写，而无需CPU的参与。由于CPU全程没有参与，因此硬件需要通过中断信号通知CPU DMA的完成状态。当然CPU也可以选择轮询寄存器的方式获取DMA的完成状态，但这就有点两边都不讨好了，会让CPU和DMA控制器都处于繁忙状态，在重数据轻计算场景下可能会看到这种用法。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2024-02-24T06:09:10.000Z">
+<meta property="article:modified_time" content="2024-02-24T15:05:49.687Z">
+<meta property="article:author" content="Jiayue Xu">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://jiayue-xu.github.io/2024/02/24/os-exploer-DMA/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://jiayue-xu.github.io/2024/02/24/os-exploer-DMA/","path":"2024/02/24/os-exploer-DMA/","title":"DMA直接内存访问"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>DMA直接内存访问 | </title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title"></p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">9</span></a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">5</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">1</span></a></li><li class="menu-item menu-item-books"><a href="/books/" rel="section"><i class="fa fa-book fa-fw"></i>books</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#DMA%E4%BC%A0%E8%BE%93%E4%BD%BF%E7%94%A8%E4%BB%80%E4%B9%88%E5%9C%B0%E5%9D%80%EF%BC%9F"><span class="nav-number">1.</span> <span class="nav-text">DMA传输使用什么地址？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8C%87%E5%AE%9A%E8%AE%BE%E5%A4%87%E5%AF%BB%E5%9D%80%E8%83%BD%E5%8A%9B"><span class="nav-number">2.</span> <span class="nav-text">指定设备寻址能力</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DMA%E6%98%A0%E5%B0%84"><span class="nav-number">3.</span> <span class="nav-text">DMA映射</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%80%E8%87%B4DMA%E6%98%A0%E5%B0%84"><span class="nav-number">3.1.</span> <span class="nav-text">一致DMA映射</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B5%81%E5%BC%8FDMA%E6%98%A0%E5%B0%84"><span class="nav-number">3.2.</span> <span class="nav-text">流式DMA映射</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Jiayue Xu</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">9</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://jiayue-xu.github.io/2024/02/24/os-exploer-DMA/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Jiayue Xu">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="DMA直接内存访问 | ">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          DMA直接内存访问
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2024-02-24 14:09:10 / 修改时间：23:05:49" itemprop="dateCreated datePublished" datetime="2024-02-24T14:09:10+08:00">2024-02-24</time>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>3k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>5 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>DMA是一种硬件机制，用于支持在<strong>外设</strong>与<strong>主机内存</strong>之间直接进行数据读写，而无需CPU的参与。由于CPU全程没有参与，因此硬件需要通过中断信号通知CPU DMA的完成状态。当然CPU也可以选择轮询寄存器的方式获取DMA的完成状态，但这就有点两边都不讨好了，会让CPU和DMA控制器都处于繁忙状态，在重数据轻计算场景下可能会看到这种用法。</p>
+<span id="more"></span>
+
+<h2 id="DMA传输使用什么地址？"><a href="#DMA传输使用什么地址？" class="headerlink" title="DMA传输使用什么地址？"></a>DMA传输使用什么地址？</h2><p>外设和主机内存都在系统总线上，对于不同的系统总线，DMA传输使用的地址类型也不一样，对于PCIe总线而言，如果没有使用IOMMU机制，DMA使用的是物理地址，对于SBus而言，使用的虚拟地址。如果DMA传输支持虚拟地址，单次DMA传输大于一页时，不要求物理页地址跨页连续。</p>
+<p>不是所有内存申请接口分配出来的内存buffer都适合用来进行DMA传输的，比如：如果分配出来的Buffer对应的内存物理地址（总线地址）高于4GB，而设备的DMA寻址能力只有32-bit，那这块Buffer就不能被这个设备用于DMA传输。</p>
+<p>在使用kmalloc和get_free_pages时，如果指定了<code>GFP_DMA</code>，申请的内存就在24-bit范围内。但是要注意，申请的内存大小不是无限制的，比如get_free_pages，MAX_ORDER为11，至多申请4MB。</p>
+<p>当你需要传输很大的DMA Buffer时，有以下几种方式：</p>
+<ol>
+<li>在系统boot阶段使用<code>mem=</code>参数指定保留部分高地址空间用于DMA传输</li>
+<li>如果设备支持的话，使用scatter/gather IO方式进行传输</li>
+</ol>
+<p>不同的架构有不同的DMA一致性限制，有些很容易就能实现一致性，有些很麻烦，Linux提供了DMA抽象层屏蔽了这些问题，常见的接口如下：</p>
+<h2 id="指定设备寻址能力"><a href="#指定设备寻址能力" class="headerlink" title="指定设备寻址能力"></a>指定设备寻址能力</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;linux/dma-mapping.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">dma_set_mask</span><span class="params">(<span class="keyword">struct</span> device *dev, u64 mask)</span>;</span><br></pre></td></tr></table></figure>
+
+<h2 id="DMA映射"><a href="#DMA映射" class="headerlink" title="DMA映射"></a>DMA映射</h2><p>DMA映射做的事情是返回一个设备可用的总线地址，看起来virt_to_bus函数也许能做这件事，但实际上在特殊场景下会遇到一些问题，比如：</p>
+<ul>
+<li>如果系统开启了IOMMU，需要把IOVA给硬件，硬件使用IOVA进行DMA传输</li>
+<li>如果应用程序malloc了一块位于4GB以上的内存空间，但是硬件的寻址能力为32-bit，此时就需要使用<strong>bounce buffer</strong>，牺牲一点DMA的性能，保证DMA可以正常进行。</li>
+</ul>
+<p>因此无法直接调用virt_to_bus把对应的总线地址给硬件，最好使用DMA通用接口进行DMA映射。</p>
+<p>DMA映射做的另一件事情是保证缓存一致性，在一些架构上通过硬件就可以实现一致性，在一些架构上则需要软件配合。</p>
+<p>有两种DMA映射方式：一致DMA映射、流式DMA映射。</p>
+<h3 id="一致DMA映射"><a href="#一致DMA映射" class="headerlink" title="一致DMA映射"></a>一致DMA映射</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> *<span class="title function_">dma_alloc_coherent</span><span class="params">(<span class="keyword">struct</span> device *dev, <span class="type">size_t</span> size, <span class="type">dma_addr_t</span> *dma_handle, <span class="type">int</span> flag)</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">dma_free_coherent</span><span class="params">(<span class="keyword">struct</span> device *dev, <span class="type">size_t</span> size, <span class="type">void</span> *vaddr, <span class="type">dma_addr_t</span> dma_handle)</span>;</span><br></pre></td></tr></table></figure>
+
+<p>此外，DMA pool用于小块的一致性DMA映射，dma_alloc_coherent至少会分配一页大小的DMA Buffer：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> dma_pool* <span class="title function_">dma_pool_create</span><span class="params">(<span class="type">const</span> <span class="type">char</span> *name, <span class="keyword">struct</span> device *dev, <span class="type">size_t</span> size, <span class="type">size_t</span> align, <span class="type">size_t</span> allocation)</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">dma_pool_destroy</span><span class="params">(<span class="keyword">struct</span> dma_pool *pool)</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> *<span class="title function_">dma_pool_alloc</span><span class="params">(<span class="keyword">struct</span> dma_pool *pool, <span class="type">int</span> mem_flags, <span class="type">dma_addr_t</span> *handle)</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">dma_pool_free</span><span class="params">(<span class="keyword">struct</span> dma_pool *pool, <span class="type">void</span> *vaddr, <span class="type">dma_addr_t</span> addr)</span>;</span><br></pre></td></tr></table></figure>
+
+<h3 id="流式DMA映射"><a href="#流式DMA映射" class="headerlink" title="流式DMA映射"></a>流式DMA映射</h3><p>流式DMA映射必须指定数据传输方向，可以用于简化缓存一致性操作：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">enum</span> <span class="title">dma_data_direction</span> &#123;</span></span><br><span class="line">    DMA_TO_DEVICE,</span><br><span class="line">    DMA_FROM_DEVICE,</span><br><span class="line">    DMA_BIDIRECTIONAL,</span><br><span class="line">    DMA_NONE,</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>针对不同的场景，使用不同的接口进行DMA映射：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">dma_addr_t</span> <span class="title function_">dma_map_single</span><span class="params">(<span class="keyword">struct</span> device *dev, <span class="type">void</span> *buffer, <span class="type">size_t</span> size, <span class="keyword">enum</span> dma_data_direction)</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">dma_unmap_single</span><span class="params">(<span class="keyword">struct</span> device *dev, <span class="type">dma_addr_t</span> dma_addr, <span class="type">size_t</span> size, <span class="keyword">enum</span> dma_data_direction)</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">dma_addr_t</span> <span class="title function_">dma_map_page</span><span class="params">(<span class="keyword">struct</span> device *dev, <span class="keyword">struct</span> page *page, <span class="type">unsigned</span> <span class="type">long</span> offsetm, <span class="type">size_t</span> size, <span class="keyword">enum</span> dma_data_direction)</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">dma_unmap_page</span><span class="params">(<span class="keyword">struct</span> device *dev, <span class="type">dma_addr_t</span> dma_address, <span class="type">size_t</span> size, <span class="keyword">enum</span> dma_data_direction direction)</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">dma_map_sg</span><span class="params">(<span class="keyword">struct</span> device *dev, <span class="keyword">struct</span> scatterlist *sg, <span class="type">int</span> nents, <span class="keyword">enum</span> dma_data_direction direction)</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">dma_unmap_sg</span><span class="params">(<span class="keyword">struct</span> device *dev, <span class="keyword">struct</span> scatterlist *<span class="built_in">list</span>, <span class="type">int</span> nents, <span class="keyword">enum</span> dma_data_direction direction)</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">dma_sync_sg_for_cpu</span><span class="params">(<span class="keyword">struct</span> device *dev, <span class="keyword">struct</span> scatterlist *sg, <span class="type">int</span> nents, <span class="keyword">enum</span> dma_data_direction direction)</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">dma_sync_sg_for_device</span><span class="params">(<span class="keyword">struct</span> device *dev, <span class="keyword">struct</span> scatterlist *sg, <span class="type">int</span> nents, <span class="keyword">enum</span> dma_data_direction direction)</span>;</span><br></pre></td></tr></table></figure>
+
+<p>当dma_map_single被调用时，对应的数据可能还在缓存中，该函数会将其flush到内存；当数据地址无法被设备寻址时，dma_map_single会创建一个bounce buffer，如果DMA方向为双向的，在map、unmap时都需要拷贝一次数据，这是比较耗时的。</p>
+<p>如果不想unmap又想访问DMA Buffer，需要调用：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">dma_sync_single_for_cpu</span><span class="params">(<span class="keyword">struct</span> device *dev, <span class="type">dma_addr_t</span> bus_addr, <span class="type">size_t</span> size, <span class="keyword">enum</span> dma_data_direction)</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">dma_sync_single_for_device</span><span class="params">(<span class="keyword">struct</span> device *dev, <span class="type">dma_addr_t</span> bus_addr, <span class="type">size_t</span> size, <span class="keyword">enum</span> dma_data_direction)</span>;</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Jiayue Xu
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://jiayue-xu.github.io/2024/02/24/os-exploer-DMA/" title="DMA直接内存访问">https://jiayue-xu.github.io/2024/02/24/os-exploer-DMA/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2024/01/24/tips-fetch-vs-pull/" rel="prev" title="git fetch vs git pull">
+                  <i class="fa fa-chevron-left"></i> git fetch vs git pull
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2024/02/25/network-congestion-control/" rel="next" title="TCP的流量控制与拥塞控制">
+                  TCP的流量控制与拥塞控制 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Jiayue Xu</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">24k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">43 分钟</span>
+  </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>
