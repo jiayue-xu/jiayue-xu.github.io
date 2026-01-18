@@ -19,26 +19,27 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"jiayue-xu.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.15.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
 
-    <meta property="og:type" content="blog">
-<meta property="og:title" content="about">
-<meta property="og:url" content="https://jiayue-xu.github.io/about/index.html">
+    <meta name="description" content="学习目标 掌握常见的应用于NLP领域的深度学习方法：词向量（Word Vectors）、前馈网络（feed-forward network）、循环网络（recurrent network）、注意力机制；transformer、编码器-解码器模型、预训练、后训练等； 了解语言学以及计算机处理语言的难点； 具备通过PyTorch构建系统解决NLP问题的能力。  怎么表示语义 语言学：用符号化的词汇用来">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="学习CS224n L1: Intro and Word Vectors">
+<meta property="og:url" content="https://jiayue-xu.github.io/2026/01/18/cs224n-cs224n-1/index.html">
 <meta property="og:site_name">
+<meta property="og:description" content="学习目标 掌握常见的应用于NLP领域的深度学习方法：词向量（Word Vectors）、前馈网络（feed-forward network）、循环网络（recurrent network）、注意力机制；transformer、编码器-解码器模型、预训练、后训练等； 了解语言学以及计算机处理语言的难点； 具备通过PyTorch构建系统解决NLP问题的能力。  怎么表示语义 语言学：用符号化的词汇用来">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2023-04-13T08:24:25.000Z">
-<meta property="article:modified_time" content="2026-01-18T07:17:19.786Z">
+<meta property="article:published_time" content="2026-01-18T09:01:25.000Z">
+<meta property="article:modified_time" content="2026-01-18T13:29:24.048Z">
 <meta property="article:author" content="Jiayue Xu">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="https://jiayue-xu.github.io/about/">
+<link rel="canonical" href="https://jiayue-xu.github.io/2026/01/18/cs224n-cs224n-1/">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":false,"lang":"zh-CN","comments":true,"permalink":"https://jiayue-xu.github.io/about/index.html","path":"about/index.html","title":"about"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://jiayue-xu.github.io/2026/01/18/cs224n-cs224n-1/","path":"2026/01/18/cs224n-cs224n-1/","title":"学习CS224n L1: Intro and Word Vectors"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>about | 
-</title>
+<title>学习CS224n L1: Intro and Word Vectors | </title>
   
 
 
@@ -209,7 +210,7 @@ mjx-container[display="true"] + br {
   
   <aside class="sidebar">
 
-    <div class="sidebar-inner sidebar-overview-active">
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
       <ul class="sidebar-nav">
         <li class="sidebar-nav-toc">
           文章目录
@@ -222,6 +223,7 @@ mjx-container[display="true"] + br {
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AD%A6%E4%B9%A0%E7%9B%AE%E6%A0%87"><span class="nav-number">1.</span> <span class="nav-text">学习目标</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%8E%E4%B9%88%E8%A1%A8%E7%A4%BA%E8%AF%AD%E4%B9%89"><span class="nav-number">2.</span> <span class="nav-text">怎么表示语义</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -264,34 +266,130 @@ mjx-container[display="true"] + br {
 
     </div>
 
-    <div class="main-inner page posts-expand">
+    <div class="main-inner post posts-expand">
 
 
-    
-    
-    
-    <div class="post-block" lang="zh-CN"><header class="post-header">
+  
 
-<h1 class="post-title" itemprop="name headline">about
-</h1>
 
-<div class="post-meta-container">
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://jiayue-xu.github.io/2026/01/18/cs224n-cs224n-1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Jiayue Xu">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="学习CS224n L1: Intro and Word Vectors | ">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          学习CS224n L1: Intro and Word Vectors
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2026-01-18 17:01:25 / 修改时间：21:29:24" itemprop="dateCreated datePublished" datetime="2026-01-18T17:01:25+08:00">2026-01-18</time>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>312</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>1 分钟</span>
+    </span>
 </div>
 
-</header>
+        </div>
+      </header>
 
-      
-      
-      <div class="post-body">
-          
-      </div>
-      
-      
-      
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h2 id="学习目标"><a href="#学习目标" class="headerlink" title="学习目标"></a>学习目标</h2><ol>
+<li>掌握常见的应用于NLP领域的深度学习方法：词向量（Word Vectors）、前馈网络（feed-forward network）、循环网络（recurrent network）、注意力机制；transformer、编码器-解码器模型、预训练、后训练等；</li>
+<li>了解语言学以及计算机处理语言的难点；</li>
+<li>具备通过PyTorch构建系统解决NLP问题的能力。</li>
+</ol>
+<h2 id="怎么表示语义"><a href="#怎么表示语义" class="headerlink" title="怎么表示语义"></a>怎么表示语义</h2><ol>
+<li>语言学：用符号化的词汇用来表达思想</li>
+<li>同义词库（WordNet）：无法表示细微的差别，无法表示新的网络俚语等</li>
+<li>离散化表达：独热码表示每个单词，局部式的表达无法表示词汇之间的相似性；</li>
+<li>Word Vectors：用一个多维的向量表示一个单词，两个单词之间的点积为他们之间的密切关系，</li>
+</ol>
+
     </div>
 
     
     
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Jiayue Xu
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://jiayue-xu.github.io/2026/01/18/cs224n-cs224n-1/" title="学习CS224n L1: Intro and Word Vectors">https://jiayue-xu.github.io/2026/01/18/cs224n-cs224n-1/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2024/06/14/rpc-rpc-dist-train/" rel="prev" title="RPC分布式训练">
+                  <i class="fa fa-chevron-left"></i> RPC分布式训练
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
 
 
 </div>
